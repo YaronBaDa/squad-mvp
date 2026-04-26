@@ -60,9 +60,9 @@
 
   .landing-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;background:var(--panel);border:1px solid var(--border);font-size:13px;color:var(--text-secondary);margin-bottom:28px;animation:pop 0.5s ease}
   .landing-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:glow-pulse 2s ease infinite}
-  .landing-title{font-size:clamp(36px,8vw,64px);font-weight:800;letter-spacing:-2px;margin-bottom:12px;line-height:1.05;font-family:var(--font-ui)}
+  .landing-title{font-size:clamp(48px,10vw,80px);font-weight:800;letter-spacing:-2.5px;margin-bottom:16px;line-height:1.02;font-family:var(--font-ui)}
   .landing-title span{color:var(--amber);text-shadow:0 0 40px var(--amber-glow)}
-  .landing-subtitle{font-size:clamp(16px,3vw,20px);color:var(--text-secondary);max-width:480px;line-height:1.6;margin-bottom:40px}
+  .landing-subtitle{font-size:clamp(18px,3.5vw,22px);color:var(--text-secondary);max-width:520px;line-height:1.6;margin-bottom:48px}
   .landing-btn{padding:16px 44px;border-radius:var(--radius);background:var(--amber);color:var(--void);font-size:16px;font-weight:700;transition:all 0.2s;letter-spacing:-0.3px}
   .landing-btn:hover{background:#fbbf24;transform:translateY(-2px);box-shadow:0 8px 30px var(--amber-glow)}
   .landing-btn:active{transform:translateY(0)}
@@ -306,8 +306,17 @@
   <div class="wizard-step" id="step1">
     <div class="wizard-step-label">Step 2 of 4</div>
     <h2>Tell us about your idea</h2>
-    <p>In plain English — what problem are you solving, and for who?</p>
-    <input type="text" class="wizard-input" id="ideaInput" placeholder="e.g. An app that helps dog owners find trusted pet sitters nearby" oninput="checkIdea()">
+    <p>In plain English — what problem are you solving, and who is it for?</p>
+    <div style="width:100%;max-width:480px;display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px">What's your idea?</label>
+        <input type="text" class="wizard-input" id="ideaInput" placeholder="e.g. An app that helps dog owners find trusted pet sitters nearby" oninput="checkIdea()" style="margin-bottom:0">
+      </div>
+      <div>
+        <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px">Who is this for?</label>
+        <input type="text" class="wizard-input" id="audienceInput" placeholder="e.g. Busy professionals who travel often and own pets" oninput="checkIdea()" style="margin-bottom:0">
+      </div>
+    </div>
     <button class="wizard-btn" id="btn1" onclick="nextStep()">Continue</button>
   </div>
 
@@ -549,7 +558,9 @@ function canProceed(){
   if(currentStep===0) return !!selectedGoal;
   if(currentStep===1){
     if(selectedGoal==='help') return false;
-    return userIdea.length>5;
+    const idea=document.getElementById('ideaInput').value.trim();
+    const audience=document.getElementById('audienceInput').value.trim();
+    return idea.length>5 && audience.length>5;
   }
   if(currentStep===2) return selectedPath!==null;
   return true;
