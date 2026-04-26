@@ -588,10 +588,17 @@ function prevStep(){
 }
 
 function backFromHelp(){
+  currentStep=0;
+  selectedGoal=null;
+  clarifyAnswers={q1:null,q2:null,q3:null};
   document.getElementById('step1-help').classList.remove('active');
   document.getElementById('step0').classList.add('active');
   document.getElementById('wizardBack').onclick=prevStep;
   document.getElementById('wizardBack').style.visibility='hidden';
+  document.querySelectorAll('.wizard-card').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('.clarify-option').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('btn1-help').className='wizard-btn';
+  updateWizardUI();
 }
 
 // ===== HELP ME DECIDE =====
@@ -607,9 +614,11 @@ function finishHelpDecide(){
   if(!(clarifyAnswers.q1&&clarifyAnswers.q2&&clarifyAnswers.q3)) return;
   const rec=getRecommendation();
   selectedGoal=rec.type;
+  currentStep=1; // FIX: advance past help step
   document.getElementById('step1-help').classList.remove('active');
   document.getElementById('step1').classList.add('active');
   document.getElementById('wizardBack').onclick=prevStep;
+  updateWizardUI();
   showToast('We recommend: '+rec.label,'info');
 }
 
