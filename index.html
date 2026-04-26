@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SQUAD — Your Startup Team</title>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -15,205 +15,232 @@
     --shadow:0 4px 24px rgba(0,0,0,0.4);
     --shadow-lg:0 8px 48px rgba(0,0,0,0.5);
   }
-  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
-  button{font-family:inherit;cursor:pointer;border:none;outline:none}
-  input{font-family:inherit;outline:none}
-  ::-webkit-scrollbar{width:6px}
+  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased;touch-action:manipulation}
+  button{font-family:inherit;cursor:pointer;border:none;outline:none;-webkit-tap-highlight-color:transparent}
+  input{font-family:inherit;outline:none;-webkit-tap-highlight-color:transparent}
+  ::-webkit-scrollbar{width:4px}
   ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
+  ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
 
-  /* ===== ANIMATIONS ===== */
   @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes slideInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-  @keyframes glow{0%,100%{box-shadow:0 0 20px var(--accent-glow)}50%{box-shadow:0 0 40px var(--accent-glow),0 0 60px rgba(59,130,246,0.15)}}
-  @keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  @keyframes toastIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
-  @keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100%)}}
+  @keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes pop{0%{transform:scale(0.85);opacity:0}100%{transform:scale(1);opacity:1}}
   @keyframes ring{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-  @keyframes pop{0%{transform:scale(0.8);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes toastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
   @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-
-  .fade-in{animation:fadeIn 0.5s ease forwards}
-  .slide-right{animation:slideInRight 0.4s ease forwards}
-  .slide-left{animation:slideInLeft 0.4s ease forwards}
+  @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.9)}}
 
   /* ===== LANDING ===== */
-  #landing{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:100;background:radial-gradient(ellipse at 50% 30%,#0d1a33 0%,var(--bg) 60%);transition:opacity 0.6s,visibility 0.6s}
+  #landing{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:100;background:radial-gradient(ellipse at 50% 30%,#0d1a33 0%,var(--bg) 60%);transition:opacity 0.5s,visibility 0.5s;padding:20px}
   #landing.hidden{opacity:0;visibility:hidden;pointer-events:none}
-  .landing-logo{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;margin-bottom:28px;box-shadow:0 8px 32px var(--accent-glow);animation:pop 0.6s ease}
-  .landing-title{font-size:clamp(36px,6vw,64px);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;line-height:1.1}
+  .landing-logo{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin-bottom:24px;box-shadow:0 8px 32px var(--accent-glow);animation:pop 0.5s ease}
+  .landing-title{font-size:clamp(32px,7vw,56px);font-weight:800;letter-spacing:-1.5px;margin-bottom:10px;line-height:1.1}
   .landing-title span{background:linear-gradient(90deg,var(--accent),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .landing-subtitle{font-size:clamp(16px,2.5vw,20px);color:var(--text2);max-width:480px;line-height:1.6;margin-bottom:40px;padding:0 24px}
-  .landing-btn{padding:16px 48px;border-radius:100px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;font-size:17px;font-weight:600;box-shadow:0 4px 24px var(--accent-glow);transition:all 0.3s}
+  .landing-subtitle{font-size:clamp(15px,3vw,18px);color:var(--text2);max-width:440px;line-height:1.6;margin-bottom:36px}
+  .landing-btn{padding:16px 40px;border-radius:100px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;font-size:16px;font-weight:600;box-shadow:0 4px 24px var(--accent-glow);transition:all 0.2s;width:100%;max-width:280px}
   .landing-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px var(--accent-glow)}
   .landing-btn:active{transform:translateY(0)}
-  .landing-trust{margin-top:48px;display:flex;gap:32px;color:var(--text3);font-size:13px;align-items:center;flex-wrap:wrap;justify-content:center}
-  .landing-trust span{display:flex;align-items:center;gap:6px}
+  .landing-trust{margin-top:36px;display:flex;gap:20px;color:var(--text3);font-size:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .landing-trust span{display:flex;align-items:center;gap:4px}
 
   /* ===== WIZARD ===== */
-  #wizard{position:fixed;inset:0;display:none;flex-direction:column;z-index:90;background:var(--bg);padding:0}
+  #wizard{position:fixed;inset:0;display:none;flex-direction:column;z-index:90;background:var(--bg)}
   #wizard.active{display:flex}
-  .wizard-header{padding:24px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2)}
-  .wizard-back{padding:8px 16px;border-radius:var(--radius-sm);background:var(--surface2);color:var(--text2);font-size:14px;transition:all 0.2s}
+  .wizard-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2);flex-shrink:0}
+  .wizard-back{padding:8px 14px;border-radius:var(--radius-sm);background:var(--surface2);color:var(--text2);font-size:13px;transition:all 0.2s}
   .wizard-back:hover{background:var(--surface3);color:var(--text)}
-  .wizard-progress{display:flex;gap:8px;align-items:center}
-  .wizard-dot{width:10px;height:10px;border-radius:50%;background:var(--surface3);transition:all 0.3s}
-  .wizard-dot.active{background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+  .wizard-progress{display:flex;gap:6px;align-items:center}
+  .wizard-dot{width:8px;height:8px;border-radius:50%;background:var(--surface3);transition:all 0.3s}
+  .wizard-dot.active{background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
   .wizard-dot.done{background:var(--success)}
-  .wizard-step{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto;animation:fadeIn 0.4s ease}
+  .wizard-step{flex:1;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px 16px;overflow-y:auto;animation:fadeIn 0.35s ease}
   .wizard-step.active{display:flex}
-  .wizard-step h2{font-size:clamp(26px,4vw,36px);font-weight:700;margin-bottom:8px;text-align:center}
-  .wizard-step p{color:var(--text2);font-size:16px;margin-bottom:32px;text-align:center;max-width:500px}
-  .wizard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:640px}
-  .wizard-card{padding:28px 24px;border-radius:var(--radius);background:var(--surface);border:2px solid transparent;cursor:pointer;transition:all 0.25s;text-align:center}
-  .wizard-card:hover{border-color:var(--surface3);transform:translateY(-3px);box-shadow:var(--shadow)}
+  .wizard-step h2{font-size:clamp(22px,5vw,30px);font-weight:700;margin-bottom:6px;text-align:center}
+  .wizard-step p{color:var(--text2);font-size:15px;margin-bottom:24px;text-align:center;max-width:460px;line-height:1.5}
+  .wizard-grid{display:grid;grid-template-columns:1fr;gap:12px;width:100%;max-width:520px}
+  @media(min-width:480px){.wizard-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+  .wizard-card{padding:22px 18px;border-radius:var(--radius);background:var(--surface);border:2px solid transparent;cursor:pointer;transition:all 0.2s;text-align:center}
+  .wizard-card:hover{border-color:var(--surface3);transform:translateY(-2px);box-shadow:var(--shadow)}
   .wizard-card.selected{border-color:var(--accent);background:var(--surface2);box-shadow:0 0 0 3px var(--accent-glow)}
-  .wizard-card .icon{font-size:36px;margin-bottom:12px}
-  .wizard-card h3{font-size:17px;font-weight:600;margin-bottom:6px}
-  .wizard-card p{font-size:14px;color:var(--text2);margin:0}
-  .wizard-input{width:100%;max-width:480px;padding:16px 20px;border-radius:var(--radius-sm);background:var(--surface);border:2px solid var(--surface2);color:var(--text);font-size:16px;transition:all 0.2s}
+  .wizard-card .icon{font-size:32px;margin-bottom:10px}
+  .wizard-card h3{font-size:16px;font-weight:600;margin-bottom:4px}
+  .wizard-card p{font-size:13px;color:var(--text2);margin:0;line-height:1.4}
+  .wizard-input{width:100%;max-width:460px;padding:14px 18px;border-radius:var(--radius-sm);background:var(--surface);border:2px solid var(--surface2);color:var(--text);font-size:15px;transition:all 0.2s}
   .wizard-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
   .wizard-input::placeholder{color:var(--text3)}
-  .wizard-btn{margin-top:32px;padding:14px 40px;border-radius:100px;background:var(--accent);color:#fff;font-size:16px;font-weight:600;transition:all 0.2s;opacity:0.5;pointer-events:none}
+  .wizard-btn{margin-top:24px;padding:14px 36px;border-radius:100px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;transition:all 0.2s;opacity:0.5;pointer-events:none;width:100%;max-width:260px}
   .wizard-btn.enabled{opacity:1;pointer-events:auto}
   .wizard-btn.enabled:hover{background:var(--accent2);transform:translateY(-2px)}
+  .wizard-btn.enabled:active{transform:translateY(0)}
+
+  /* Strategic paths */
+  .path-card{display:flex;align-items:flex-start;gap:14px;padding:18px;border-radius:var(--radius);background:var(--surface);border:2px solid transparent;cursor:pointer;transition:all 0.2s;text-align:left}
+  .path-card:hover{border-color:var(--surface3);box-shadow:var(--shadow)}
+  .path-card.selected{border-color:var(--accent);background:var(--surface2);box-shadow:0 0 0 3px var(--accent-glow)}
+  .path-card .path-num{width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+  .path-card.selected .path-num{background:var(--accent);color:#fff}
+  .path-card .path-title{font-weight:600;margin-bottom:3px;font-size:15px}
+  .path-card .path-desc{font-size:13px;color:var(--text2);line-height:1.45}
+  .path-card .path-tag{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:100px;background:var(--surface2);font-size:11px;color:var(--text2)}
+
+  /* Help me decide */
+  .clarify-question{background:var(--surface2);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;text-align:left}
+  .clarify-question h4{font-size:14px;font-weight:600;margin-bottom:10px}
+  .clarify-options{display:flex;flex-wrap:wrap;gap:8px}
+  .clarify-option{padding:8px 14px;border-radius:100px;background:var(--surface3);border:1px solid transparent;color:var(--text2);font-size:13px;cursor:pointer;transition:all 0.2s}
+  .clarify-option:hover{border-color:var(--accent);color:var(--accent)}
+  .clarify-option.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
 
   /* ===== ASSEMBLY ===== */
-  #assembly{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:95;background:var(--bg);text-align:center}
+  #assembly{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:95;background:var(--bg);text-align:center;padding:20px}
   #assembly.active{display:flex}
-  .assembly-ring{width:120px;height:120px;border-radius:50%;border:4px solid var(--surface2);border-top-color:var(--accent);animation:ring 1.2s linear infinite;margin-bottom:32px}
-  .assembly-title{font-size:28px;font-weight:700;margin-bottom:12px}
-  .assembly-text{color:var(--text2);font-size:16px;max-width:400px;line-height:1.6}
-  .assembly-agents{display:flex;gap:-8px;margin-top:32px}
-  .assembly-agent{width:48px;height:48px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-left:-8px;border:3px solid var(--bg);animation:pop 0.4s ease backwards}
+  .assembly-ring{width:100px;height:100px;border-radius:50%;border:3px solid var(--surface2);border-top-color:var(--accent);animation:ring 1.2s linear infinite;margin-bottom:28px}
+  .assembly-title{font-size:24px;font-weight:700;margin-bottom:10px}
+  .assembly-text{color:var(--text2);font-size:15px;max-width:360px;line-height:1.55}
+  .assembly-agents{display:flex;margin-top:28px;justify-content:center}
+  .assembly-agent{width:44px;height:44px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-left:-6px;border:3px solid var(--bg);animation:pop 0.35s ease backwards}
   .assembly-agent:nth-child(1){animation-delay:0.1s}
   .assembly-agent:nth-child(2){animation-delay:0.2s}
   .assembly-agent:nth-child(3){animation-delay:0.3s}
   .assembly-agent:nth-child(4){animation-delay:0.4s}
 
   /* ===== DASHBOARD ===== */
-  #dashboard{position:fixed;inset:0;display:none;grid-template-columns:280px 1fr 320px;grid-template-rows:1fr auto;z-index:80;background:var(--bg)}
-  #dashboard.active{display:grid}
-  @media(max-width:1024px){#dashboard{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}}
+  #dashboard{position:fixed;inset:0;display:none;flex-direction:column;z-index:80;background:var(--bg)}
+  #dashboard.active{display:flex}
 
-  /* Squad Panel */
-  .squad-panel{background:var(--surface);border-right:1px solid var(--surface2);display:flex;flex-direction:column;overflow:hidden}
-  .squad-header{padding:20px 20px 12px}
-  .squad-header h3{font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
-  .squad-list{flex:1;overflow-y:auto;padding:0 12px 12px}
-  .squad-agent{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;margin-bottom:4px}
+  /* Mobile nav toggle */
+  .mobile-nav{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--surface2);background:var(--surface)}
+  .mobile-nav-btn{flex:1;padding:8px 12px;border-radius:var(--radius-sm);background:transparent;color:var(--text3);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.2s;text-align:center}
+  .mobile-nav-btn.active{background:var(--surface2);color:var(--text)}
+
+  /* Dashboard panels */
+  .dash-content{flex:1;display:flex;overflow:hidden}
+  @media(max-width:768px){.dash-content{flex-direction:column}}
+
+  .panel{overflow-y:auto;transition:all 0.3s}
+  .panel-squad{width:260px;border-right:1px solid var(--surface2);background:var(--surface);flex-shrink:0}
+  .panel-main{flex:1;overflow-y:auto;min-width:0}
+  .panel-activity{width:300px;border-left:1px solid var(--surface2);background:var(--surface);flex-shrink:0}
+
+  @media(max-width:768px){
+    .panel-squad,.panel-activity{width:100%;border:none;display:none}
+    .panel-squad.active,.panel-activity.active{display:block}
+    .panel-main{display:none}
+    .panel-main.active{display:block}
+  }
+  @media(min-width:769px){
+    .mobile-nav{display:none}
+    .panel-squad,.panel-main,.panel-activity{display:block!important}
+  }
+
+  .panel-header{padding:16px 16px 10px}
+  .panel-header h3{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.8px}
+
+  /* Squad list */
+  .squad-list{padding:0 10px 10px}
+  .squad-agent{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;margin-bottom:3px}
   .squad-agent:hover{background:var(--surface2)}
-  .squad-agent .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--surface3);flex-shrink:0}
+  .squad-agent .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface3);flex-shrink:0}
   .squad-agent .info{flex:1;min-width:0}
-  .squad-agent .name{font-size:14px;font-weight:600}
-  .squad-agent .role{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .squad-agent .status{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .squad-agent .status.online{background:var(--success);box-shadow:0 0 6px var(--success)}
-  .squad-agent .status.busy{background:var(--warning);box-shadow:0 0 6px var(--warning)}
+  .squad-agent .name{font-size:13px;font-weight:600}
+  .squad-agent .role{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .squad-agent .status{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .squad-agent .status.online{background:var(--success);box-shadow:0 0 4px var(--success)}
+  .squad-agent .status.busy{background:var(--warning);box-shadow:0 0 4px var(--warning)}
   .squad-agent .status.idle{background:var(--text3)}
 
-  /* Main Area */
-  .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-  .main-header{padding:20px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2)}
-  .main-header h1{font-size:22px;font-weight:700}
-  .main-header .badge{padding:6px 14px;border-radius:100px;background:var(--surface2);font-size:13px;color:var(--text2)}
-  .map-container{flex:1;padding:28px;overflow-y:auto}
-  .progress-map{display:flex;flex-direction:column;gap:20px;max-width:600px;margin:0 auto}
-  .map-node{display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--surface2);cursor:pointer;transition:all 0.25s;position:relative}
-  .map-node:hover{border-color:var(--surface3);transform:translateX(4px)}
-  .map-node.done{border-color:var(--success);background:rgba(16,185,129,0.05)}
-  .map-node.active{border-color:var(--accent);background:rgba(59,130,246,0.05);box-shadow:0 0 20px var(--accent-glow)}
-  .map-node .node-num{width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+  /* Main area */
+  .main-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2)}
+  .main-header h1{font-size:18px;font-weight:700}
+  .main-header .badge{padding:5px 12px;border-radius:100px;background:var(--surface2);font-size:12px;color:var(--text2)}
+  .map-container{padding:20px}
+  .progress-map{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto}
+  .map-node{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--surface2);cursor:pointer;transition:all 0.2s}
+  .map-node:hover{border-color:var(--surface3)}
+  .map-node.done{border-color:var(--success);background:rgba(16,185,129,0.04)}
+  .map-node.active{border-color:var(--accent);background:rgba(59,130,246,0.04)}
+  .map-node .node-num{width:32px;height:32px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
   .map-node.done .node-num{background:var(--success);color:#fff}
   .map-node.active .node-num{background:var(--accent);color:#fff}
-  .map-node .node-content{flex:1}
-  .map-node .node-title{font-weight:600;margin-bottom:4px}
-  .map-node .node-desc{font-size:13px;color:var(--text2);line-height:1.5}
-  .map-node .node-meta{display:flex;gap:12px;margin-top:10px;font-size:12px;color:var(--text3)}
-  .map-node .node-meta span{display:flex;align-items:center;gap:4px}
-  .map-node .checklist{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--surface2)}
-  .map-node.expanded .checklist{display:block;animation:fadeIn 0.3s ease}
-  .map-node .checklist-item{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px}
-  .map-node .checklist-item .chk{width:18px;height:18px;border-radius:4px;border:2px solid var(--surface3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+  .map-node .node-title{font-weight:600;font-size:14px;margin-bottom:3px}
+  .map-node .node-desc{font-size:12px;color:var(--text2);line-height:1.45}
+  .map-node .node-meta{display:flex;gap:10px;margin-top:8px;font-size:11px;color:var(--text3);flex-wrap:wrap}
+  .map-node .node-meta span{display:flex;align-items:center;gap:3px}
+  .map-node .checklist{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--surface2)}
+  .map-node.expanded .checklist{display:block;animation:fadeIn 0.25s ease}
+  .map-node .checklist-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px}
+  .map-node .checklist-item .chk{width:16px;height:16px;border-radius:3px;border:2px solid var(--surface3);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
   .map-node .checklist-item.done .chk{background:var(--success);border-color:var(--success);color:#fff}
   .map-node .checklist-item.done{color:var(--text3);text-decoration:line-through}
 
-  /* Activity Panel */
-  .activity-panel{background:var(--surface);border-left:1px solid var(--surface2);display:flex;flex-direction:column;overflow:hidden}
-  .activity-header{padding:20px 20px 12px;border-bottom:1px solid var(--surface2)}
-  .activity-header h3{font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
-  .activity-feed{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-  .activity-item{display:flex;gap:12px;padding:12px;border-radius:var(--radius-sm);background:var(--surface2);animation:slideInRight 0.3s ease;transition:all 0.3s}
+  /* Activity panel */
+  .activity-feed{padding:12px;display:flex;flex-direction:column;gap:10px}
+  .activity-item{display:flex;gap:10px;padding:10px;border-radius:var(--radius-sm);background:var(--surface2);animation:slideInRight 0.25s ease;transition:all 0.2s}
   .activity-item:hover{background:var(--surface3)}
-  .activity-item .act-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface3);flex-shrink:0}
-  .activity-item .act-text{font-size:13px;line-height:1.5;flex:1}
+  .activity-item .act-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface3);flex-shrink:0}
+  .activity-item .act-text{font-size:12px;line-height:1.5;flex:1}
   .activity-item .act-text strong{color:var(--text);font-weight:600}
-  .activity-item .act-time{font-size:11px;color:var(--text3);margin-top:4px}
-  .activity-item.user-msg{background:rgba(59,130,246,0.1);border-left:3px solid var(--accent)}
-  .activity-item.agent-reply{background:rgba(16,185,129,0.05);border-left:3px solid var(--success)}
+  .activity-item .act-time{font-size:10px;color:var(--text3);margin-top:3px}
+  .activity-item.user-msg{background:rgba(59,130,246,0.08);border-left:2px solid var(--accent)}
+  .activity-item.agent-reply{background:rgba(16,185,129,0.04);border-left:2px solid var(--success)}
+  .typing{display:none;align-items:center;gap:5px;padding:6px 10px}
+  .typing.active{display:flex}
+  .typing span{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:typing 1s ease infinite}
+  .typing span:nth-child(2){animation-delay:0.15s}
+  .typing span:nth-child(3){animation-delay:0.3s}
 
   /* Summon Bar */
-  .summon-bar{grid-column:1/-1;padding:16px 24px;background:var(--surface2);border-top:1px solid var(--surface3);display:flex;gap:12px;align-items:center}
-  .summon-input{flex:1;padding:12px 18px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text);font-size:15px;transition:all 0.2s}
-  .summon-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+  .summon-bar{padding:12px 16px;background:var(--surface2);border-top:1px solid var(--surface3);display:flex;gap:10px;align-items:center;flex-shrink:0}
+  .summon-input{flex:1;padding:10px 16px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text);font-size:14px;transition:all 0.2s;min-width:0}
+  .summon-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
   .summon-input::placeholder{color:var(--text3)}
-  .summon-send{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all 0.2s;flex-shrink:0}
-  .summon-send:hover{background:var(--accent2);transform:scale(1.05)}
-  .quick-prompts{display:flex;gap:8px;flex-wrap:wrap}
-  .quick-prompt{padding:8px 16px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text2);font-size:13px;transition:all 0.2s;white-space:nowrap}
-  .quick-prompt:hover{border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,0.1)}
+  .summon-send{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s;flex-shrink:0}
+  .summon-send:hover{background:var(--accent2)}
+  .quick-prompts{display:flex;gap:6px;flex-wrap:wrap}
+  .quick-prompt{padding:6px 12px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text2);font-size:12px;transition:all 0.2s;white-space:nowrap}
+  .quick-prompt:hover{border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,0.08)}
+  @media(max-width:480px){.quick-prompts{display:none}}
 
-  /* Agent Detail Modal */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+  /* Agent Modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
   .modal-overlay.active{display:flex}
-  .modal{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--surface2);box-shadow:var(--shadow-lg);animation:pop 0.3s ease;overflow:hidden}
-  .modal-header{padding:24px 24px 16px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--surface2)}
-  .modal-header .avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--surface2)}
-  .modal-header .info h3{font-size:20px;font-weight:700}
-  .modal-header .info p{font-size:14px;color:var(--text2);margin-top:2px}
-  .modal-body{padding:20px 24px}
-  .modal-body h4{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
-  .modal-task{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px;border-bottom:1px solid var(--surface2)}
+  .modal{width:100%;max-width:380px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--surface2);box-shadow:var(--shadow-lg);animation:pop 0.25s ease;overflow:hidden}
+  .modal-header{padding:20px 20px 14px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--surface2)}
+  .modal-header .avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--surface2)}
+  .modal-header .info h3{font-size:18px;font-weight:700}
+  .modal-header .info p{font-size:13px;color:var(--text2);margin-top:2px}
+  .modal-body{padding:16px 20px}
+  .modal-body h4{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+  .modal-task{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;border-bottom:1px solid var(--surface2)}
   .modal-task:last-child{border-bottom:none}
-  .modal-task .status-dot{width:8px;height:8px;border-radius:50%}
-  .modal-footer{padding:16px 24px 24px;display:flex;gap:10px}
-  .modal-btn{flex:1;padding:12px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;transition:all 0.2s}
+  .modal-task .status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .modal-footer{padding:14px 20px 20px;display:flex;gap:8px}
+  .modal-btn{flex:1;padding:11px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;transition:all 0.2s}
   .modal-btn.primary{background:var(--accent);color:#fff}
   .modal-btn.primary:hover{background:var(--accent2)}
   .modal-btn.secondary{background:var(--surface2);color:var(--text)}
   .modal-btn.secondary:hover{background:var(--surface3)}
-  .modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--surface2);color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all 0.2s}
-  .modal-close:hover{background:var(--surface3);color:var(--text)}
 
   /* Toast */
-  .toast-container{position:fixed;top:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:10px;pointer-events:none}
-  .toast{pointer-events:auto;padding:14px 20px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--surface2);box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;animation:toastIn 0.4s ease;max-width:360px;font-size:14px}
-  .toast.out{animation:toastOut 0.4s ease forwards}
-  .toast .icon{font-size:20px}
+  .toast-container{position:fixed;top:12px;right:12px;z-index:300;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:calc(100vw - 24px)}
+  .toast{pointer-events:auto;padding:12px 16px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--surface2);box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;animation:toastIn 0.35s ease;font-size:13px}
+  .toast.out{opacity:0;transform:translateY(-10px);transition:all 0.3s}
+  .toast .icon{font-size:18px}
   .toast.success{border-color:var(--success)}
   .toast.info{border-color:var(--accent)}
-  .toast.warning{border-color:var(--warning)}
-
-  /* Typing indicator */
-  .typing{display:none;align-items:center;gap:6px;padding:8px 12px}
-  .typing.active{display:flex}
-  .typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:typing 1s ease infinite}
-  .typing span:nth-child(2){animation-delay:0.15s}
-  .typing span:nth-child(3){animation-delay:0.3s}
 </style>
 </head>
 <body>
 
-<!-- ===== TOASTS ===== -->
 <div class="toast-container" id="toasts"></div>
 
 <!-- ===== LANDING ===== -->
 <div id="landing">
   <div class="landing-logo">S</div>
   <h1 class="landing-title">Build your startup<br>with your own <span>SQUAD</span></h1>
-  <p class="landing-subtitle">You bring the idea. We bring the team. A full startup crew — planner, designer, builder, marketer, and more — working together to turn your vision into reality.</p>
+  <p class="landing-subtitle">You bring the idea. We bring the team. A full startup crew working together to turn your vision into reality.</p>
   <button class="landing-btn" onclick="startWizard()">Get Started — It's Free</button>
   <div class="landing-trust">
     <span>✓ No coding needed</span>
@@ -230,6 +257,7 @@
       <div class="wizard-dot active" id="dot0"></div>
       <div class="wizard-dot" id="dot1"></div>
       <div class="wizard-dot" id="dot2"></div>
+      <div class="wizard-dot" id="dot3"></div>
     </div>
     <div style="width:60px"></div>
   </div>
@@ -237,27 +265,32 @@
   <!-- Step 1: Goal -->
   <div class="wizard-step active" id="step0">
     <h2>What do you want to build?</h2>
-    <p>Pick the option that feels closest to your idea. Don't worry — you can change this later.</p>
+    <p>Pick what feels closest. Not sure? Select "Help me decide."</p>
     <div class="wizard-grid">
       <div class="wizard-card" onclick="selectGoal('app',this)">
         <div class="icon">📱</div>
         <h3>A Mobile App</h3>
-        <p>Something people download and use on their phones</p>
+        <p>People download and use it on their phones</p>
       </div>
       <div class="wizard-card" onclick="selectGoal('web',this)">
         <div class="icon">🌐</div>
         <h3>A Website</h3>
-        <p>A site people visit in their browser</p>
+        <p>People visit it in their browser</p>
       </div>
       <div class="wizard-card" onclick="selectGoal('market',this)">
         <div class="icon">🛒</div>
         <h3>A Marketplace</h3>
-        <p>Connect buyers and sellers</p>
+        <p>Connect buyers with sellers</p>
       </div>
       <div class="wizard-card" onclick="selectGoal('community',this)">
         <div class="icon">🤝</div>
         <h3>A Community</h3>
-        <p>Bring people together around a shared interest</p>
+        <p>Bring people together around an interest</p>
+      </div>
+      <div class="wizard-card" onclick="selectGoal('help',this)" style="grid-column:1/-1">
+        <div class="icon">🤔</div>
+        <h3>Help Me Decide</h3>
+        <p>I'm not sure yet — ask me a few questions to figure it out</p>
       </div>
     </div>
     <button class="wizard-btn" id="btn0" onclick="nextStep()">Continue</button>
@@ -266,18 +299,82 @@
   <!-- Step 2: Idea -->
   <div class="wizard-step" id="step1">
     <h2>Tell us about your idea</h2>
-    <p>In plain English — no need to be technical. What's the problem you're solving?</p>
+    <p>In plain English — what problem are you solving, and for who?</p>
     <input type="text" class="wizard-input" id="ideaInput" placeholder="e.g. An app that helps dog owners find trusted pet sitters nearby" oninput="checkIdea()">
     <button class="wizard-btn" id="btn1" onclick="nextStep()">Continue</button>
   </div>
 
-  <!-- Step 3: Confirm -->
-  <div class="wizard-step" id="step2">
-    <h2>Your SQUAD is ready</h2>
-    <p>We've assembled a team of specialists based on what you're building. Here's who you'll be working with:</p>
-    <div class="wizard-grid" id="squadPreview" style="max-width:500px">
-      <!-- Filled by JS -->
+  <!-- Step 3: Help Me Decide (conditional) -->
+  <div class="wizard-step" id="step1-help">
+    <h2>Let's figure this out together</h2>
+    <p>Answer a couple quick questions and I'll suggest the best approach.</p>
+    <div style="width:100%;max-width:480px">
+      <div class="clarify-question">
+        <h4>1. Who is your main customer?</h4>
+        <div class="clarify-options" id="q1">
+          <button class="clarify-option" onclick="selectClarify('q1',this,'consumer')">Everyday people</button>
+          <button class="clarify-option" onclick="selectClarify('q1',this,'business')">Other businesses</button>
+          <button class="clarify-option" onclick="selectClarify('q1',this,'both')">Both</button>
+        </div>
+      </div>
+      <div class="clarify-question">
+        <h4>2. What's the main interaction?</h4>
+        <div class="clarify-options" id="q2">
+          <button class="clarify-option" onclick="selectClarify('q2',this,'buy')">Buying & selling</button>
+          <button class="clarify-option" onclick="selectClarify('q2',this,'connect')">Connecting people</button>
+          <button class="clarify-option" onclick="selectClarify('q2',this,'tool')">Using a tool/service</button>
+        </div>
+      </div>
+      <div class="clarify-question">
+        <h4>3. How do people access it?</h4>
+        <div class="clarify-options" id="q3">
+          <button class="clarify-option" onclick="selectClarify('q3',this,'phone')">Mainly on phones</button>
+          <button class="clarify-option" onclick="selectClarify('q3',this,'computer')">Mainly on computers</button>
+          <button class="clarify-option" onclick="selectClarify('q3',this,'anywhere')">Anywhere</button>
+        </div>
+      </div>
     </div>
+    <button class="wizard-btn" id="btn1-help" onclick="finishHelpDecide()">See My Recommendation</button>
+  </div>
+
+  <!-- Step 3: Strategic Paths -->
+  <div class="wizard-step" id="step2">
+    <h2>Here are 3 ways to build this</h2>
+    <p>Pick the approach that fits your timeline and budget.</p>
+    <div class="wizard-grid" style="max-width:520px;grid-template-columns:1fr" id="pathsGrid">
+      <div class="path-card" onclick="selectPath(0,this)">
+        <div class="path-num">A</div>
+        <div>
+          <div class="path-title">Start Simple</div>
+          <div class="path-desc">Build a landing page first to test interest. Fastest and cheapest way to validate your idea before building the full product.</div>
+          <span class="path-tag">1-2 weeks · $500-2K</span>
+        </div>
+      </div>
+      <div class="path-card" onclick="selectPath(1,this)">
+        <div class="path-num">B</div>
+        <div>
+          <div class="path-title">Build the Core</div>
+          <div class="path-desc">Launch with the one feature that matters most. Get real users fast, then add more based on what they actually need.</div>
+          <span class="path-tag">4-6 weeks · $3K-8K</span>
+        </div>
+      </div>
+      <div class="path-card" onclick="selectPath(2,this)">
+        <div class="path-num">C</div>
+        <div>
+          <div class="path-title">Full Product</div>
+          <div class="path-desc">Build everything from day one. Best if you have a clear vision, budget, and want to make a strong first impression.</div>
+          <span class="path-tag">8-12 weeks · $10K+</span>
+        </div>
+      </div>
+    </div>
+    <button class="wizard-btn" id="btn2" onclick="nextStep()">Continue</button>
+  </div>
+
+  <!-- Step 4: Squad Preview -->
+  <div class="wizard-step" id="step3">
+    <h2>Your SQUAD is ready</h2>
+    <p>Here's who you'll be working with:</p>
+    <div class="wizard-grid" id="squadPreview" style="max-width:480px"></div>
     <button class="wizard-btn enabled" onclick="launchSquad()">Meet My SQUAD →</button>
   </div>
 </div>
@@ -297,54 +394,57 @@
 
 <!-- ===== DASHBOARD ===== -->
 <div id="dashboard">
-  <!-- Squad Panel -->
-  <div class="squad-panel">
-    <div class="squad-header">
-      <h3>Your Team</h3>
-    </div>
-    <div class="squad-list" id="squadList"></div>
+  <div class="mobile-nav">
+    <button class="mobile-nav-btn active" onclick="showPanel('squad')">Team</button>
+    <button class="mobile-nav-btn" onclick="showPanel('main')">Progress</button>
+    <button class="mobile-nav-btn" onclick="showPanel('activity')">Chat</button>
   </div>
 
-  <!-- Main Area -->
-  <div class="main-area">
-    <div class="main-header">
-      <h1>Your Progress</h1>
-      <div class="badge" id="progressBadge">0% Complete</div>
+  <div class="dash-content">
+    <!-- Squad Panel -->
+    <div class="panel panel-squad active" id="panelSquad">
+      <div class="panel-header"><h3>Your Team</h3></div>
+      <div class="squad-list" id="squadList"></div>
     </div>
-    <div class="map-container">
-      <div class="progress-map" id="progressMap"></div>
-    </div>
-  </div>
 
-  <!-- Activity Panel -->
-  <div class="activity-panel">
-    <div class="activity-header">
-      <h3>Recent Updates</h3>
+    <!-- Main Area -->
+    <div class="panel panel-main" id="panelMain">
+      <div class="main-header">
+        <h1>Your Progress</h1>
+        <div class="badge" id="progressBadge">0% Complete</div>
+      </div>
+      <div class="map-container">
+        <div class="progress-map" id="progressMap"></div>
+      </div>
     </div>
-    <div class="activity-feed" id="activityFeed">
-      <div class="typing" id="typingIndicator">
-        <span></span><span></span><span></span>
-        <span style="font-size:12px;color:var(--text3);margin-left:4px">Your team is getting ready...</span>
+
+    <!-- Activity Panel -->
+    <div class="panel panel-activity" id="panelActivity">
+      <div class="panel-header"><h3>Recent Updates</h3></div>
+      <div class="activity-feed" id="activityFeed">
+        <div class="typing" id="typingIndicator">
+          <span></span><span></span><span></span>
+          <span style="font-size:11px;color:var(--text3);margin-left:4px">Your team is getting ready...</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Summon Bar -->
   <div class="summon-bar">
     <input type="text" class="summon-input" id="summonInput" placeholder="Ask your SQUAD anything..." onkeydown="if(event.key==='Enter')sendSummon()">
     <button class="summon-send" onclick="sendSummon()">→</button>
     <div class="quick-prompts">
-      <button class="quick-prompt" onclick="quickAsk('I need a logo')">I need a logo</button>
-      <button class="quick-prompt" onclick="quickAsk('How do I find customers?')">Find customers</button>
-      <button class="quick-prompt" onclick="quickAsk('Write my pitch')">Write my pitch</button>
-      <button class="quick-prompt" onclick="quickAsk('Is my app secure?')">Check security</button>
+      <button class="quick-prompt" onclick="quickAsk('I need a logo')">Logo</button>
+      <button class="quick-prompt" onclick="quickAsk('How do I find customers?')">Customers</button>
+      <button class="quick-prompt" onclick="quickAsk('Write my pitch')">Pitch</button>
+      <button class="quick-prompt" onclick="quickAsk('Is my app secure?')">Security</button>
     </div>
   </div>
 </div>
 
-<!-- ===== AGENT DETAIL MODAL ===== -->
+<!-- ===== AGENT MODAL ===== -->
 <div class="modal-overlay" id="agentModal" onclick="closeModal(event)">
-  <div class="modal" style="position:relative">
+  <div class="modal">
     <div class="modal-header">
       <div class="avatar" id="modalAvatar">🎯</div>
       <div class="info">
@@ -365,9 +465,10 @@
 
 <script>
 // ===== STATE =====
-let currentStep = 0, selectedGoal = null, userIdea = '';
-let squad = [], activities = [], mapNodes = [];
-let currentAgent = null;
+let currentStep = 0, selectedGoal = null, userIdea = '', selectedPath = null;
+let clarifyAnswers = {q1:null,q2:null,q3:null};
+let squad = [], currentAgent = null;
+let mobilePanel = 'squad';
 
 const AGENTS = [
   {id:'planner',name:'Alex',role:'The Planner',emoji:'🎯',desc:'Maps out your strategy and keeps everything on track',color:'#3b82f6',tasks:['Reviewing your idea','Defining your first milestones','Setting up your project timeline']},
@@ -389,40 +490,40 @@ const MAP_DATA = [
 ];
 
 const RESPONSES = {
-  logo: {agent:'designer',text:'I\'m on it! I\'ll create 3 logo concepts for you. Give me about 10 minutes and I\'ll show you some options. What feeling do you want your brand to have — playful, professional, or bold?'},
-  design: {agent:'designer',text:'Great question about design! I\'m currently working on your color palette and first screen layouts. Would you like to see some early concepts?'},
-  look: {agent:'designer',text:'I\'ve been thinking about your visual style. I\'m leaning toward a clean, modern look — but I want your input. Do you have any apps or brands you love the look of?'},
-  build: {agent:'builder',text:'I\'ve started building the foundation of your app. Right now I\'m setting up user accounts and the main database. Everything is going smoothly so far!'},
-  code: {agent:'builder',text:'No need to worry about the technical stuff — that\'s my job! I\'m building your app with modern, reliable technology. I\'ll handle all the complex parts.'},
-  tech: {agent:'builder',text:'I\'m using solid, proven technology for your app. It\'ll be fast, secure, and able to grow with you. I\'ll keep you posted on progress!'},
-  users: {agent:'marketer',text:'Finding your first customers is my specialty! I\'m researching where your target audience hangs out online. I\'ll have a launch strategy ready for you soon.'},
-  customer: {agent:'marketer',text:'I\'m working on a customer acquisition plan. The key is finding the right channels — social media, partnerships, or organic growth. What\'s your budget for marketing?'},
-  growth: {agent:'marketer',text:'Growth is all about the right strategy at the right time. I\'m putting together a phased plan — starting with a small group of early users, then scaling up.'},
-  money: {agent:'money',text:'I\'ve been analyzing how similar products price themselves. I\'ll recommend a model that gets you revenue while keeping customers happy. Want to see some numbers?'},
-  price: {agent:'money',text:'Pricing is critical! I\'m looking at what your competitors charge and what your audience is willing to pay. I\'ll have a recommendation for you shortly.'},
-  revenue: {agent:'money',text:'Your revenue model is taking shape. I\'m evaluating subscription vs. one-time payment — each has pros and cons for your type of product.'},
-  plan: {agent:'planner',text:'I\'ve mapped out your first 90 days. The key milestones are: finalize design, build the core app, test with 10 users, then launch publicly. Sound good?'},
-  strategy: {agent:'planner',text:'I\'m thinking about your long-term strategy. Right now we focus on proving your idea works. Once we have 100 happy users, we scale. One step at a time!'},
-  timeline: {agent:'planner',text:'Here\'s what I\'m thinking for timing: Brand & design (Week 1-2), Build core app (Week 3-5), Test & refine (Week 6), Launch (Week 7). Does that feel right?'},
-  words: {agent:'writer',text:'I\'m drafting the words your users will see — from your homepage headline to the button labels. The goal is making everything crystal clear and compelling.'},
-  content: {agent:'writer',text:'Content is king! I\'m writing your website copy, welcome emails, and social media posts. Want to review the homepage headline?'},
-  pitch: {agent:'writer',text:'I\'d love to write your pitch! I need to know: Who is your audience (investors, customers, or partners), and what\'s the one thing that makes your idea special?'},
-  test: {agent:'tester',text:'I\'m running tests on every part of your app. So far everything looks solid! I\'ll flag anything that needs fixing before users see it.'},
-  bug: {agent:'tester',text:'No bugs on my watch! I\'m checking every button, every form, every screen. If something breaks, I\'ll catch it and the Builder will fix it.'},
-  secure: {agent:'builder',text:'Security is my top priority. I\'m implementing bank-level encryption for user data and secure login. Your users\' information will be safe.'},
-  safe: {agent:'builder',text:'Yes, your app will be secure. I\'m building in protection from day one — encrypted data, secure logins, and regular security checks.'},
-  process: {agent:'organizer',text:'I\'m keeping everyone organized! Your task board is set up, deadlines are clear, and I\'m making sure nothing falls through the cracks.'},
-  organize: {agent:'organizer',text:'I\'ve set up your project dashboard. You\'ll be able to see what everyone is working on and when things will be ready.'}
+  logo:{agent:'designer',text:'I\'m on it! I\'ll create 3 logo concepts for you. What feeling do you want your brand to have — playful, professional, or bold?'},
+  design:{agent:'designer',text:'Great question about design! I\'m currently working on your color palette and first screen layouts. Want to see some early concepts?'},
+  look:{agent:'designer',text:'I\'ve been thinking about your visual style. Do you have any apps or brands you love the look of?'},
+  build:{agent:'builder',text:'I\'ve started building the foundation. Right now I\'m setting up user accounts and the main database. Everything looks solid!'},
+  code:{agent:'builder',text:'No need to worry about the technical stuff — that\'s my job! I\'m building your app with modern, reliable technology.'},
+  tech:{agent:'builder',text:'I\'m using solid, proven technology. It\'ll be fast, secure, and able to grow with you.'},
+  users:{agent:'marketer',text:'Finding your first customers is my specialty! I\'m researching where your target audience hangs out online. I\'ll have a strategy ready soon.'},
+  customer:{agent:'marketer',text:'I\'m working on a customer acquisition plan. What\'s your budget for marketing?'},
+  growth:{agent:'marketer',text:'Growth is all about the right strategy at the right time. I\'m putting together a phased plan starting with early users.'},
+  money:{agent:'money',text:'I\'ve been analyzing how similar products price themselves. Want to see some numbers?'},
+  price:{agent:'money',text:'Pricing is critical! I\'m looking at what competitors charge and what your audience is willing to pay.'},
+  revenue:{agent:'money',text:'Your revenue model is taking shape. I\'m evaluating subscription vs. one-time payment.'},
+  plan:{agent:'planner',text:'I\'ve mapped out your first 90 days. The key milestones are: finalize design, build core app, test with 10 users, then launch. Sound good?'},
+  strategy:{agent:'planner',text:'I\'m thinking about your long-term strategy. Right now we focus on proving your idea works. Once we have 100 happy users, we scale.'},
+  timeline:{agent:'planner',text:'Here\'s what I\'m thinking: Brand & design (Week 1-2), Build core app (Week 3-5), Test & refine (Week 6), Launch (Week 7). Does that feel right?'},
+  words:{agent:'writer',text:'I\'m drafting the words your users will see — from your homepage headline to button labels. The goal is making everything crystal clear.'},
+  content:{agent:'writer',text:'Content is king! I\'m writing your website copy, welcome emails, and social posts. Want to review the homepage headline?'},
+  pitch:{agent:'writer',text:'I\'d love to write your pitch! Who is your audience — investors, customers, or partners? And what makes your idea special?'},
+  test:{agent:'tester',text:'I\'m running tests on every part of your app. So far everything looks solid! I\'ll flag anything before users see it.'},
+  bug:{agent:'tester',text:'No bugs on my watch! I\'m checking every button, every form, every screen.'},
+  secure:{agent:'builder',text:'Security is my top priority. I\'m implementing bank-level encryption and secure login. Your users\' data will be safe.'},
+  safe:{agent:'builder',text:'Yes, your app will be secure. I\'m building in protection from day one.'},
+  process:{agent:'organizer',text:'I\'m keeping everyone organized! Your task board is set up and deadlines are clear.'},
+  organize:{agent:'organizer',text:'I\'ve set up your project dashboard. You can see what everyone is working on.'}
 };
 
 const QUICK_RESPONSES = {
-  'I need a logo': {agent:'designer',text:'Perfect! I\'ll start working on logo concepts right now. I\'ll create 3 different directions and show them to you in a few minutes.',toast:'Designer is sketching your logo concepts 🎨'},
-  'How do I find customers?': {agent:'marketer',text:'I\'m putting together a customer acquisition plan for you. I\'ll identify the best channels for your specific audience and budget.',toast:'Marketer is building your growth strategy 📢'},
-  'Write my pitch': {agent:'writer',text:'I\'d love to! To write the best pitch, tell me: Are you pitching to investors, customers, or partners? And what\'s the one thing that makes your idea impossible to ignore?',toast:'Writer is drafting your pitch ✍️'},
-  'Is my app secure?': {agent:'builder',text:'Absolutely. I\'m building security into every layer — encrypted passwords, protected data, and secure connections. I\'ll run a full security check before launch.',toast:'Builder is running a security check 🔧'}
+  'I need a logo':{agent:'designer',text:'Perfect! I\'ll start working on logo concepts right now. I\'ll create 3 different directions and show them to you shortly.',toast:'Designer is sketching your logo concepts 🎨'},
+  'How do I find customers?':{agent:'marketer',text:'I\'m putting together a customer acquisition plan. I\'ll identify the best channels for your audience and budget.',toast:'Marketer is building your growth strategy 📢'},
+  'Write my pitch':{agent:'writer',text:'I\'d love to! To write the best pitch, tell me: Are you pitching to investors, customers, or partners? And what\'s the one thing that makes your idea impossible to ignore?',toast:'Writer is drafting your pitch ✍️'},
+  'Is my app secure?':{agent:'builder',text:'Absolutely. I\'m building security into every layer — encrypted passwords, protected data, and secure connections. I\'ll run a full security check before launch.',toast:'Builder is running a security check 🔧'}
 };
 
-// ===== INIT =====
+// ===== WIZARD NAVIGATION =====
 function startWizard(){
   document.getElementById('landing').classList.add('hidden');
   document.getElementById('wizard').classList.add('active');
@@ -430,40 +531,52 @@ function startWizard(){
 }
 
 function updateWizardUI(){
-  for(let i=0;i<3;i++){
-    const dot = document.getElementById('dot'+i);
-    dot.className = 'wizard-dot' + (i===currentStep?' active':i<currentStep?' done':'');
-    document.getElementById('step'+i).classList.toggle('active', i===currentStep);
+  for(let i=0;i<4;i++){
+    const dot=document.getElementById('dot'+i);
+    dot.className='wizard-dot'+(i===currentStep?' active':i<currentStep?' done':'');
+    document.getElementById('step'+i).classList.toggle('active',i===currentStep);
   }
-  document.getElementById('wizardBack').style.visibility = currentStep===0?'hidden':'visible';
-  const btn = document.getElementById('btn'+currentStep);
-  if(btn) btn.className = 'wizard-btn' + (canProceed()?' enabled':'');
+  document.getElementById('step1-help').classList.remove('active');
+  document.getElementById('wizardBack').style.visibility=currentStep===0?'hidden':'visible';
+  const btn=document.getElementById('btn'+currentStep);
+  if(btn) btn.className='wizard-btn'+(canProceed()?' enabled':'');
 }
 
 function canProceed(){
   if(currentStep===0) return !!selectedGoal;
-  if(currentStep===1) return userIdea.length>5;
+  if(currentStep===1){
+    if(selectedGoal==='help') return false;
+    return userIdea.length>5;
+  }
+  if(currentStep===2) return selectedPath!==null;
   return true;
 }
 
 function selectGoal(goal,el){
-  selectedGoal = goal;
+  selectedGoal=goal;
   document.querySelectorAll('.wizard-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
   updateWizardUI();
 }
 
 function checkIdea(){
-  userIdea = document.getElementById('ideaInput').value;
+  userIdea=document.getElementById('ideaInput').value;
   updateWizardUI();
 }
 
 function nextStep(){
   if(!canProceed()) return;
-  if(currentStep<2){
+  if(currentStep===0 && selectedGoal==='help'){
+    document.getElementById('step0').classList.remove('active');
+    document.getElementById('step1-help').classList.add('active');
+    document.getElementById('wizardBack').style.visibility='visible';
+    document.getElementById('wizardBack').onclick=backFromHelp;
+    return;
+  }
+  if(currentStep<3){
     currentStep++;
     updateWizardUI();
-    if(currentStep===2) renderSquadPreview();
+    if(currentStep===3) renderSquadPreview();
   }
 }
 
@@ -474,13 +587,55 @@ function prevStep(){
   }
 }
 
+function backFromHelp(){
+  document.getElementById('step1-help').classList.remove('active');
+  document.getElementById('step0').classList.add('active');
+  document.getElementById('wizardBack').onclick=prevStep;
+  document.getElementById('wizardBack').style.visibility='hidden';
+}
+
+// ===== HELP ME DECIDE =====
+function selectClarify(q,el,val){
+  document.querySelectorAll('#'+q+' .clarify-option').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  clarifyAnswers[q]=val;
+  const allAnswered=clarifyAnswers.q1&&clarifyAnswers.q2&&clarifyAnswers.q3;
+  document.getElementById('btn1-help').className='wizard-btn'+(allAnswered?' enabled':'');
+}
+
+function finishHelpDecide(){
+  if(!(clarifyAnswers.q1&&clarifyAnswers.q2&&clarifyAnswers.q3)) return;
+  const rec=getRecommendation();
+  selectedGoal=rec.type;
+  document.getElementById('step1-help').classList.remove('active');
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('wizardBack').onclick=prevStep;
+  showToast('We recommend: '+rec.label,'info');
+}
+
+function getRecommendation(){
+  const {q1,q2,q3}=clarifyAnswers;
+  if(q2==='buy') return {type:'market',label:'A Marketplace'};
+  if(q2==='connect') return {type:'community',label:'A Community Platform'};
+  if(q3==='phone') return {type:'app',label:'A Mobile App'};
+  return {type:'web',label:'A Website'};
+}
+
+// ===== STRATEGIC PATHS =====
+function selectPath(idx,el){
+  selectedPath=idx;
+  document.querySelectorAll('.path-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('btn2').className='wizard-btn enabled';
+}
+
 function renderSquadPreview(){
-  const container = document.getElementById('squadPreview');
-  container.innerHTML = AGENTS.map(a=>`
-    <div class="wizard-card" style="padding:16px">
-      <div style="font-size:28px;margin-bottom:8px">${a.emoji}</div>
-      <h3 style="font-size:15px">${a.name}</h3>
-      <p style="font-size:13px">${a.role}</p>
+  const container=document.getElementById('squadPreview');
+  container.innerHTML=AGENTS.map(a=>`
+    <div class="wizard-card" style="padding:14px">
+      <div style="font-size:24px;margin-bottom:6px">${a.emoji}</div>
+      <h3 style="font-size:14px">${a.name}</h3>
+      <p style="font-size:12px">${a.role}</p>
     </div>
   `).join('');
 }
@@ -488,38 +643,35 @@ function renderSquadPreview(){
 function launchSquad(){
   document.getElementById('wizard').classList.remove('active');
   document.getElementById('assembly').classList.add('active');
-
-  const texts = ['Finding the right specialists for your idea','Briefing your team on the project','Setting up your workspace','Almost ready...'];
+  const texts=['Finding the right specialists','Briefing your team on the project','Setting up your workspace','Almost ready...'];
   let i=0;
-  const interval = setInterval(()=>{
+  const interval=setInterval(()=>{
     i++;
-    if(i<texts.length) document.getElementById('assemblyText').textContent = texts[i];
+    if(i<texts.length) document.getElementById('assemblyText').textContent=texts[i];
     else{
       clearInterval(interval);
       setTimeout(()=>{
         document.getElementById('assembly').classList.remove('active');
         document.getElementById('dashboard').classList.add('active');
         initDashboard();
-      },600);
+      },500);
     }
-  },900);
+  },800);
 }
 
 // ===== DASHBOARD =====
 function initDashboard(){
-  squad = AGENTS.map(a=>({...a,status:Math.random()>0.3?'online':'busy'}));
+  squad=AGENTS.map(a=>({...a,status:Math.random()>0.3?'online':'busy'}));
   renderSquad();
   renderMap();
   showToast('Your SQUAD is ready to work! 🎯','info');
-
-  // Initial activities
-  setTimeout(()=>addActivity('planner','I\'ve reviewed your idea and set up the project plan. Let\'s build something great!','agent-reply'),800);
-  setTimeout(()=>addActivity('designer','I\'m starting on your brand look. I\'ll have concepts ready soon.','agent-reply'),2000);
-  setTimeout(()=>addActivity('builder','Foundation is going in place. Everything looks solid so far.','agent-reply'),3500);
+  setTimeout(()=>addActivity('planner','I\'ve reviewed your idea and set up the project plan. Let\'s build something great!','agent-reply'),600);
+  setTimeout(()=>addActivity('designer','I\'m starting on your brand look. I\'ll have concepts ready soon.','agent-reply'),1600);
+  setTimeout(()=>addActivity('builder','Foundation is going in place. Everything looks solid so far.','agent-reply'),2800);
 }
 
 function renderSquad(){
-  document.getElementById('squadList').innerHTML = squad.map(a=>`
+  document.getElementById('squadList').innerHTML=squad.map(a=>`
     <div class="squad-agent" onclick="openAgentModal('${a.id}')">
       <div class="avatar" style="background:${a.color}22">${a.emoji}</div>
       <div class="info">
@@ -532,14 +684,13 @@ function renderSquad(){
 }
 
 function renderMap(){
-  const map = document.getElementById('progressMap');
-  let doneCount = MAP_DATA.filter(n=>n.done).length;
-  document.getElementById('progressBadge').textContent = Math.round((doneCount/MAP_DATA.length)*100)+'% Complete';
-
-  map.innerHTML = MAP_DATA.map((node,i)=>`
+  const map=document.getElementById('progressMap');
+  let doneCount=MAP_DATA.filter(n=>n.done).length;
+  document.getElementById('progressBadge').textContent=Math.round((doneCount/MAP_DATA.length)*100)+'% Complete';
+  map.innerHTML=MAP_DATA.map((node,i)=>`
     <div class="map-node ${node.done?'done':i===doneCount?'active':''}" id="node-${node.id}" onclick="toggleNode('${node.id}')">
       <div class="node-num">${node.done?'✓':i+1}</div>
-      <div class="node-content">
+      <div style="flex:1;min-width:0">
         <div class="node-title">${node.title}</div>
         <div class="node-desc">${node.desc}</div>
         <div class="node-meta">
@@ -560,143 +711,112 @@ function renderMap(){
 }
 
 function toggleNode(id){
-  const el = document.getElementById('node-'+id);
-  el.classList.toggle('expanded');
+  document.getElementById('node-'+id).classList.toggle('expanded');
 }
 
 // ===== ACTIVITY =====
 function addActivity(agentId,text,type='agent-reply'){
-  const feed = document.getElementById('activityFeed');
-  const agent = AGENTS.find(a=>a.id===agentId);
-  const div = document.createElement('div');
-  div.className = `activity-item ${type}`;
-  div.innerHTML = `
-    <div class="act-avatar" style="background:${agent.color}22">${agent.emoji}</div>
-    <div class="act-text">
-      <strong>${agent.name}</strong> ${text}
-      <div class="act-time">Just now</div>
-    </div>
-  `;
+  const feed=document.getElementById('activityFeed');
+  const agent=AGENTS.find(a=>a.id===agentId);
+  const div=document.createElement('div');
+  div.className=`activity-item ${type}`;
+  div.innerHTML=`<div class="act-avatar" style="background:${agent.color}22">${agent.emoji}</div><div class="act-text"><strong>${agent.name}</strong> ${text}<div class="act-time">Just now</div></div>`;
   feed.appendChild(div);
-  feed.scrollTop = feed.scrollHeight;
-
-  // Keep only last 20
-  while(feed.children.length > 20) feed.removeChild(feed.firstChild);
+  feed.scrollTop=feed.scrollHeight;
+  while(feed.children.length>25) feed.removeChild(feed.firstChild);
 }
 
 function addUserMessage(text){
-  const feed = document.getElementById('activityFeed');
-  const div = document.createElement('div');
-  div.className = 'activity-item user-msg';
-  div.innerHTML = `
-    <div class="act-avatar" style="background:var(--accent-glow)">👤</div>
-    <div class="act-text">
-      <strong>You</strong> ${text}
-      <div class="act-time">Just now</div>
-    </div>
-  `;
+  const feed=document.getElementById('activityFeed');
+  const div=document.createElement('div');
+  div.className='activity-item user-msg';
+  div.innerHTML=`<div class="act-avatar" style="background:var(--accent-glow)">👤</div><div class="act-text"><strong>You</strong> ${text}<div class="act-time">Just now</div></div>`;
   feed.appendChild(div);
-  feed.scrollTop = feed.scrollHeight;
+  feed.scrollTop=feed.scrollHeight;
 }
 
-// ===== SUMMON / CHAT =====
+// ===== SUMMON =====
 function sendSummon(){
-  const input = document.getElementById('summonInput');
-  const text = input.value.trim();
+  const input=document.getElementById('summonInput');
+  const text=input.value.trim();
   if(!text) return;
-
   addUserMessage(text);
-  input.value = '';
-
-  // Show typing
-  const typing = document.getElementById('typingIndicator');
+  input.value='';
+  const typing=document.getElementById('typingIndicator');
   typing.classList.add('active');
-
-  // Find response
-  const lower = text.toLowerCase();
-  let match = null;
-  for(const key in RESPONSES){
-    if(lower.includes(key)){ match = RESPONSES[key]; break; }
-  }
-
-  const delay = 800 + Math.random()*1200;
+  const lower=text.toLowerCase();
+  let match=null;
+  for(const key in RESPONSES){if(lower.includes(key)){match=RESPONSES[key];break;}}
+  const delay=700+Math.random()*1000;
   setTimeout(()=>{
     typing.classList.remove('active');
-    if(match){
-      addActivity(match.agent, match.text);
-    } else {
-      addActivity('planner','That\'s a great question! I\'m connecting you with the right team member. In the meantime, try asking about your logo, finding customers, or your launch timeline.');
-    }
-  }, delay);
+    if(match) addActivity(match.agent,match.text);
+    else addActivity('planner','That\'s a great question! I\'m connecting you with the right team member. Try asking about your logo, finding customers, or your launch timeline.');
+  },delay);
 }
 
 function quickAsk(text){
-  document.getElementById('summonInput').value = text;
   addUserMessage(text);
-
-  const typing = document.getElementById('typingIndicator');
+  const typing=document.getElementById('typingIndicator');
   typing.classList.add('active');
-
-  const qr = QUICK_RESPONSES[text];
-  const delay = 600 + Math.random()*800;
-
+  const qr=QUICK_RESPONSES[text];
+  const delay=500+Math.random()*700;
   setTimeout(()=>{
     typing.classList.remove('active');
-    addActivity(qr.agent, qr.text);
+    addActivity(qr.agent,qr.text);
     if(qr.toast) showToast(qr.toast,'success');
-  }, delay);
+  },delay);
 }
 
 // ===== AGENT MODAL =====
 function openAgentModal(id){
-  currentAgent = id;
-  const a = AGENTS.find(x=>x.id===id);
-  document.getElementById('modalAvatar').textContent = a.emoji;
-  document.getElementById('modalAvatar').style.background = a.color+'22';
-  document.getElementById('modalName').textContent = a.name;
-  document.getElementById('modalRole').textContent = a.role + ' — ' + a.desc;
-  document.getElementById('modalTasks').innerHTML = a.tasks.map(t=>`
-    <div class="modal-task">
-      <div class="status-dot" style="background:var(--accent)"></div>
-      <span>${t}</span>
-    </div>
-  `).join('');
+  currentAgent=id;
+  const a=AGENTS.find(x=>x.id===id);
+  document.getElementById('modalAvatar').textContent=a.emoji;
+  document.getElementById('modalAvatar').style.background=a.color+'22';
+  document.getElementById('modalName').textContent=a.name;
+  document.getElementById('modalRole').textContent=a.role+' — '+a.desc;
+  document.getElementById('modalTasks').innerHTML=a.tasks.map(t=>`<div class="modal-task"><div class="status-dot"></div><span>${t}</span></div>`).join('');
   document.getElementById('agentModal').classList.add('active');
 }
 
 function closeModal(e){
-  if(!e || e.target.id==='agentModal'){
-    document.getElementById('agentModal').classList.remove('active');
-  }
+  if(!e||e.target.id==='agentModal') document.getElementById('agentModal').classList.remove('active');
 }
 
 function talkToAgent(){
   closeModal();
   if(currentAgent){
-    const a = AGENTS.find(x=>x.id===currentAgent);
+    const a=AGENTS.find(x=>x.id===currentAgent);
     document.getElementById('summonInput').focus();
     showToast(`Ask ${a.name} anything in the chat below`,'info');
   }
 }
 
+// ===== MOBILE PANELS =====
+function showPanel(name){
+  mobilePanel=name;
+  document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  if(name==='squad') document.getElementById('panelSquad').classList.add('active');
+  if(name==='main') document.getElementById('panelMain').classList.add('active');
+  if(name==='activity') document.getElementById('panelActivity').classList.add('active');
+}
+
 // ===== TOASTS =====
 function showToast(text,type='info'){
-  const container = document.getElementById('toasts');
-  const div = document.createElement('div');
-  const icon = type==='success'?'✓':type==='warning'?'⚠':'ℹ';
-  div.className = `toast ${type}`;
-  div.innerHTML = `<span class="icon">${icon}</span><span>${text}</span>`;
+  const container=document.getElementById('toasts');
+  const div=document.createElement('div');
+  const icon=type==='success'?'✓':'ℹ';
+  div.className=`toast ${type}`;
+  div.innerHTML=`<span class="icon">${icon}</span><span>${text}</span>`;
   container.appendChild(div);
-  setTimeout(()=>{
-    div.classList.add('out');
-    setTimeout(()=>div.remove(),400);
-  },4000);
+  setTimeout(()=>{div.classList.add('out');setTimeout(()=>div.remove(),300);},3500);
 }
 
 // ===== KEYBOARD =====
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape') closeModal();
-});
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
 </script>
 </body>
 </html>
