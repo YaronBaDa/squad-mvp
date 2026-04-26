@@ -174,6 +174,21 @@
   .artifact-card .art-action{padding:6px 14px;border-radius:var(--radius-sm);background:var(--base);border:1px solid var(--border);color:var(--text-secondary);font-size:12px;font-weight:600;transition:all 0.2s}
   .artifact-card .art-action:hover{background:var(--amber);border-color:var(--amber);color:var(--void)}
 
+  /* Squad Intro */
+  .squad-intro-grid{display:grid;grid-template-columns:1fr;gap:10px;width:100%;max-width:520px}
+  @media(min-width:480px){.squad-intro-grid{grid-template-columns:repeat(2,1fr)}}
+  .squad-intro-card{padding:16px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--border);cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
+  .squad-intro-card:hover{border-color:var(--amber);transform:translateY(-2px)}
+  .squad-intro-card.met{border-color:var(--teal);background:var(--teal-soft)}
+  .squad-intro-card .s-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .squad-intro-card .s-emoji{width:44px;height:44px;border-radius:50%;background:var(--base);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:all 0.3s}
+  .squad-intro-card.met .s-emoji{background:var(--teal);border-color:var(--teal);transform:scale(1.05)}
+  .squad-intro-card .s-name{font-size:15px;font-weight:700;letter-spacing:-0.3px}
+  .squad-intro-card .s-role{font-size:12px;color:var(--text-secondary)}
+  .squad-intro-card .s-msg{font-size:13px;color:var(--text-secondary);line-height:1.5;min-height:40px}
+  .squad-intro-card .s-hint{font-size:11px;color:var(--text-muted);margin-top:8px;font-weight:500}
+  .squad-intro-card.met .s-hint{color:var(--teal)}
+
   .summon-bar{padding:12px 24px;background:var(--base);border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-shrink:0;position:relative;z-index:10}
   .summon-input{flex:1;padding:10px 16px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--border);color:var(--text);font-size:14px;transition:all 0.2s;min-width:0;font-family:var(--font-ui)}
   .summon-input:focus{border-color:var(--amber);box-shadow:0 0 0 2px var(--amber-soft)}
@@ -397,10 +412,10 @@
 
   <div class="wizard-step" id="step3">
     <div class="wizard-step-label">Step 4 of 4</div>
-    <h2>Your SQUAD is ready</h2>
-    <p>Here's who you'll be working with:</p>
-    <div class="wizard-grid" id="squadPreview" style="max-width:480px"></div>
-    <button class="wizard-btn enabled" onclick="launchSquad()">Meet My SQUAD →</button>
+    <h2>Meet your SQUAD</h2>
+    <p>These are the people who are going to build this with you. Click each one to say hello.</p>
+    <div class="squad-intro-grid" id="squadIntroGrid"></div>
+    <button class="wizard-btn enabled" id="btn3" onclick="launchSquad()" style="display:none">Let's build this together →</button>
   </div>
 </div>
 
@@ -469,15 +484,17 @@ let clarifyAnswers={q1:null,q2:null,q3:null};
 let squad=[],activeArtifact=null;
 
 const AGENTS=[
-  {id:'planner',name:'Alex',role:'Planner',emoji:'🎯',color:'#3b82f6'},
-  {id:'designer',name:'Maya',role:'Designer',emoji:'🎨',color:'#ec4899'},
-  {id:'builder',name:'Raj',role:'Builder',emoji:'🔧',color:'#10b981'},
-  {id:'tester',name:'Sam',role:'Tester',emoji:'🔍',color:'#f59e0b'},
-  {id:'marketer',name:'Zoe',role:'Marketer',emoji:'📢',color:'#8b5cf6'},
-  {id:'writer',name:'Noah',role:'Writer',emoji:'✍️',color:'#06b6d4'},
-  {id:'money',name:'Priya',role:'Money',emoji:'💰',color:'#eab308'},
-  {id:'organizer',name:'Omar',role:'Organizer',emoji:'📋',color:'#f97316'}
+  {id:'planner',name:'Alex',role:'Planner',emoji:'🎯',color:'#3b82f6',greet:'Hey! I\'m Alex. I\'ll be your strategist — mapping out the plan and making sure we hit every milestone. I love a good roadmap.',hint:'Click to say hello 👋'},
+  {id:'designer',name:'Maya',role:'Designer',emoji:'🎨',color:'#ec4899',greet:'Hi there! I\'m Maya. I design how things look and feel. Clean, modern, and always with your users in mind. Can\'t wait to show you what I come up with!',hint:'Click to say hello 👋'},
+  {id:'builder',name:'Raj',role:'Builder',emoji:'🔧',color:'#10b981',greet:'What\'s up! I\'m Raj. I build the tech that makes your idea real. Solid, fast, and built to grow. You don\'t need to worry about the complicated stuff — I got it.',hint:'Click to say hello 👋'},
+  {id:'tester',name:'Sam',role:'Tester',emoji:'🔍',color:'#f59e0b',greet:'Hello! I\'m Sam. I break things so your users don\'t have to. Every button, every flow, every edge case — I\'ll catch it before it matters.',hint:'Click to say hello 👋'},
+  {id:'marketer',name:'Zoe',role:'Marketer',emoji:'📢',color:'#8b5cf6',greet:'Hey! I\'m Zoe. I get your product in front of the right people. I\'m already thinking about where your first 100 users are hanging out. 🚀',hint:'Click to say hello 👋'},
+  {id:'writer',name:'Noah',role:'Writer',emoji:'✍️',color:'#06b6d4',greet:'Hi! I\'m Noah. Words are my thing — headlines, emails, pitch decks. I make sure people understand why your idea matters in 10 seconds or less.',hint:'Click to say hello 👋'},
+  {id:'money',name:'Priya',role:'Money',emoji:'💰',color:'#eab308',greet:'Hey! I\'m Priya. I figure out how this makes money — pricing, revenue models, financial planning. I\'ll make sure the numbers work as well as the product does.',hint:'Click to say hello 👋'},
+  {id:'organizer',name:'Omar',role:'Organizer',emoji:'📋',color:'#f97316',greet:'What\'s good! I\'m Omar. I keep everyone on track and on time. Deadlines, check-ins, deliverables — nothing slips through the cracks on my watch.',hint:'Click to say hello 👋'}
 ];
+
+let metAgents=new Set();
 
 const ARTIFACTS=[
   {id:'brand',title:'Brand Identity',desc:'Logo concepts, color palette, and typography system',agent:'designer',progress:65,status:'progress',type:'design',
@@ -649,13 +666,38 @@ function selectPath(idx,el){
 }
 
 function renderSquadPreview(){
-  document.getElementById('squadPreview').innerHTML=AGENTS.map(a=>`
-    <div class="wizard-card" style="padding:14px">
-      <div style="font-size:22px;margin-bottom:6px">${a.emoji}</div>
-      <h3 style="font-size:14px">${a.name}</h3>
-      <p style="font-size:12px">${a.role}</p>
+  metAgents.clear();
+  const grid=document.getElementById('squadIntroGrid');
+  grid.innerHTML=AGENTS.map((a,i)=>`
+    <div class="squad-intro-card" id="intro-${a.id}" onclick="meetAgent('${a.id}')">
+      <div class="s-top">
+        <div class="s-emoji" style="background:${a.color}15">${a.emoji}</div>
+        <div>
+          <div class="s-name">${a.name}</div>
+          <div class="s-role">${a.role}</div>
+        </div>
+      </div>
+      <div class="s-msg" id="msg-${a.id}">${a.hint}</div>
+      <div class="s-hint" id="hint-${a.id}">Tap to meet them</div>
     </div>
   `).join('');
+  document.getElementById('btn3').style.display='none';
+}
+
+function meetAgent(id){
+  if(metAgents.has(id)) return;
+  const a=AGENTS.find(x=>x.id===id);
+  metAgents.add(id);
+  const card=document.getElementById('intro-'+id);
+  card.classList.add('met');
+  document.getElementById('msg-'+id).textContent=a.greet;
+  document.getElementById('hint-'+id).textContent='Nice to meet you! ✅';
+  showToast(`${a.name} says hi! 👋`,'success');
+  if(metAgents.size===AGENTS.length){
+    document.getElementById('btn3').style.display='block';
+    document.getElementById('btn3').classList.add('enabled');
+    showToast('Your whole team is ready! Let\'s build this. 🚀','info');
+  }
 }
 
 function launchSquad(){
