@@ -7,30 +7,28 @@
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --bg:#080c14;--surface:#0f1525;--surface2:#161d2f;--surface3:#1e2640;
-    --text:#e8ecf3;--text2:#9aa3b2;--text3:#5c6575;
-    --accent:#3b82f6;--accent2:#60a5fa;--accent-glow:rgba(59,130,246,0.3);
+    --bg:#070a12;--surface:#0e1420;--surface2:#151c2c;--surface3:#1e283a;
+    --text:#e8ecf3;--text2:#8b95a8;--text3:#5c6578;
+    --accent:#3b82f6;--accent2:#60a5fa;--accent-glow:rgba(59,130,246,0.25);
     --success:#10b981;--warning:#f59e0b;--error:#ef4444;
-    --radius:16px;--radius-sm:10px;
-    --shadow:0 4px 24px rgba(0,0,0,0.4);
-    --shadow-lg:0 8px 48px rgba(0,0,0,0.5);
+    --radius:14px;--radius-sm:8px;
+    --shadow:0 4px 20px rgba(0,0,0,0.35);
+    --shadow-lg:0 8px 40px rgba(0,0,0,0.45);
   }
-  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased;touch-action:manipulation}
-  button{font-family:inherit;cursor:pointer;border:none;outline:none;-webkit-tap-highlight-color:transparent}
-  input{font-family:inherit;outline:none;-webkit-tap-highlight-color:transparent}
-  ::-webkit-scrollbar{width:4px}
-  ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
+  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
+  button,input{font-family:inherit;cursor:pointer;border:none;outline:none;-webkit-tap-highlight-color:transparent}
+  input{cursor:text}
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
 
-  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes pop{0%{transform:scale(0.85);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pop{0%{transform:scale(0.9);opacity:0}100%{transform:scale(1);opacity:1}}
   @keyframes ring{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-  @keyframes toastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-  @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.9)}}
+  @keyframes toastIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes drawLine{0%{stroke-dashoffset:300}100%{stroke-dashoffset:0}}
+  @keyframes typeChar{0%{opacity:0}100%{opacity:1}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
   /* ===== LANDING ===== */
   #landing{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:100;background:radial-gradient(ellipse at 50% 30%,#0d1a33 0%,var(--bg) 60%);transition:opacity 0.5s,visibility 0.5s;padding:20px}
@@ -40,10 +38,9 @@
   .landing-title span{background:linear-gradient(90deg,var(--accent),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
   .landing-subtitle{font-size:clamp(15px,3vw,18px);color:var(--text2);max-width:440px;line-height:1.6;margin-bottom:36px}
   .landing-btn{padding:16px 40px;border-radius:100px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;font-size:16px;font-weight:600;box-shadow:0 4px 24px var(--accent-glow);transition:all 0.2s;width:100%;max-width:280px}
-  .landing-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px var(--accent-glow)}
+  .landing-btn:hover{transform:translateY(-2px)}
   .landing-btn:active{transform:translateY(0)}
-  .landing-trust{margin-top:36px;display:flex;gap:20px;color:var(--text3);font-size:12px;align-items:center;flex-wrap:wrap;justify-content:center}
-  .landing-trust span{display:flex;align-items:center;gap:4px}
+  .landing-trust{margin-top:36px;display:flex;gap:20px;color:var(--text3);font-size:12px;flex-wrap:wrap;justify-content:center}
 
   /* ===== WIZARD ===== */
   #wizard{position:fixed;inset:0;display:none;flex-direction:column;z-index:90;background:var(--bg)}
@@ -51,7 +48,7 @@
   .wizard-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2);flex-shrink:0}
   .wizard-back{padding:8px 14px;border-radius:var(--radius-sm);background:var(--surface2);color:var(--text2);font-size:13px;transition:all 0.2s}
   .wizard-back:hover{background:var(--surface3);color:var(--text)}
-  .wizard-progress{display:flex;gap:6px;align-items:center}
+  .wizard-progress{display:flex;gap:6px}
   .wizard-dot{width:8px;height:8px;border-radius:50%;background:var(--surface3);transition:all 0.3s}
   .wizard-dot.active{background:var(--accent);box-shadow:0 0 6px var(--accent-glow)}
   .wizard-dot.done{background:var(--success)}
@@ -73,9 +70,6 @@
   .wizard-btn{margin-top:24px;padding:14px 36px;border-radius:100px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;transition:all 0.2s;opacity:0.5;pointer-events:none;width:100%;max-width:260px}
   .wizard-btn.enabled{opacity:1;pointer-events:auto}
   .wizard-btn.enabled:hover{background:var(--accent2);transform:translateY(-2px)}
-  .wizard-btn.enabled:active{transform:translateY(0)}
-
-  /* Strategic paths */
   .path-card{display:flex;align-items:flex-start;gap:14px;padding:18px;border-radius:var(--radius);background:var(--surface);border:2px solid transparent;cursor:pointer;transition:all 0.2s;text-align:left}
   .path-card:hover{border-color:var(--surface3);box-shadow:var(--shadow)}
   .path-card.selected{border-color:var(--accent);background:var(--surface2);box-shadow:0 0 0 3px var(--accent-glow)}
@@ -84,8 +78,6 @@
   .path-card .path-title{font-weight:600;margin-bottom:3px;font-size:15px}
   .path-card .path-desc{font-size:13px;color:var(--text2);line-height:1.45}
   .path-card .path-tag{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:100px;background:var(--surface2);font-size:11px;color:var(--text2)}
-
-  /* Help me decide */
   .clarify-question{background:var(--surface2);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;text-align:left}
   .clarify-question h4{font-size:14px;font-weight:600;margin-bottom:10px}
   .clarify-options{display:flex;flex-wrap:wrap;gap:8px}
@@ -101,127 +93,99 @@
   .assembly-text{color:var(--text2);font-size:15px;max-width:360px;line-height:1.55}
   .assembly-agents{display:flex;margin-top:28px;justify-content:center}
   .assembly-agent{width:44px;height:44px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-left:-6px;border:3px solid var(--bg);animation:pop 0.35s ease backwards}
-  .assembly-agent:nth-child(1){animation-delay:0.1s}
-  .assembly-agent:nth-child(2){animation-delay:0.2s}
-  .assembly-agent:nth-child(3){animation-delay:0.3s}
-  .assembly-agent:nth-child(4){animation-delay:0.4s}
 
   /* ===== DASHBOARD ===== */
   #dashboard{position:fixed;inset:0;display:none;flex-direction:column;z-index:80;background:var(--bg)}
   #dashboard.active{display:flex}
 
-  /* Mobile nav toggle */
-  .mobile-nav{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--surface2);background:var(--surface)}
-  .mobile-nav-btn{flex:1;padding:8px 12px;border-radius:var(--radius-sm);background:transparent;color:var(--text3);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.2s;text-align:center}
-  .mobile-nav-btn.active{background:var(--surface2);color:var(--text)}
+  /* Top bar */
+  .dash-top{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2);background:var(--surface);flex-shrink:0}
+  .dash-top h1{font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
+  .dash-top .status-pill{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;background:var(--surface2);font-size:12px;color:var(--text2)}
+  .dash-top .status-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:pulse 2s ease infinite}
+  .agent-avatars{display:flex;align-items:center;gap:6px}
+  .agent-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--surface2);cursor:pointer;transition:all 0.2s;border:2px solid transparent}
+  .agent-avatar:hover{transform:scale(1.1);border-color:var(--accent)}
 
-  /* Dashboard panels */
-  .dash-content{flex:1;display:flex;overflow:hidden}
-  @media(max-width:768px){.dash-content{flex-direction:column}}
+  /* Artifact Grid */
+  .artifact-scroll{flex:1;overflow-y:auto;padding:20px}
+  .artifact-grid{display:grid;grid-template-columns:1fr;gap:16px;max-width:1200px;margin:0 auto}
+  @media(min-width:640px){.artifact-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.artifact-grid{grid-template-columns:repeat(3,1fr)}}
+  .artifact-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--surface2);overflow:hidden;transition:all 0.25s;cursor:pointer;display:flex;flex-direction:column}
+  .artifact-card:hover{border-color:var(--surface3);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+  .artifact-card .art-preview{height:160px;background:var(--surface2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .artifact-card .art-preview svg, .artifact-card .art-preview canvas{width:100%;height:100%}
+  .artifact-card .art-badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:100px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+  .artifact-card .art-badge.done{background:var(--success)}
+  .artifact-card .art-badge.progress{background:var(--accent)}
+  .artifact-card .art-badge.review{background:var(--warning)}
+  .artifact-card .art-body{padding:16px;flex:1;display:flex;flex-direction:column}
+  .artifact-card .art-title{font-size:15px;font-weight:600;margin-bottom:4px}
+  .artifact-card .art-desc{font-size:13px;color:var(--text2);line-height:1.45;margin-bottom:12px;flex:1}
+  .artifact-card .art-footer{display:flex;align-items:center;justify-content:space-between}
+  .artifact-card .art-agent{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)}
+  .artifact-card .art-agent .ava{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;background:var(--surface3)}
+  .artifact-card .art-progress{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-bottom:12px}
+  .artifact-card .art-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width 0.5s ease}
+  .artifact-card .art-action{padding:6px 14px;border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-size:12px;font-weight:600;transition:all 0.2s}
+  .artifact-card .art-action:hover{background:var(--accent);color:#fff}
 
-  .panel{overflow-y:auto;transition:all 0.3s}
-  .panel-squad{width:260px;border-right:1px solid var(--surface2);background:var(--surface);flex-shrink:0}
-  .panel-main{flex:1;overflow-y:auto;min-width:0}
-  .panel-activity{width:300px;border-left:1px solid var(--surface2);background:var(--surface);flex-shrink:0}
-
-  @media(max-width:768px){
-    .panel-squad,.panel-activity{width:100%;border:none;display:none}
-    .panel-squad.active,.panel-activity.active{display:block}
-    .panel-main{display:none}
-    .panel-main.active{display:block}
-  }
-  @media(min-width:769px){
-    .mobile-nav{display:none}
-    .panel-squad,.panel-main,.panel-activity{display:block!important}
-  }
-
-  .panel-header{padding:16px 16px 10px}
-  .panel-header h3{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.8px}
-
-  /* Squad list */
-  .squad-list{padding:0 10px 10px}
-  .squad-agent{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;margin-bottom:3px}
-  .squad-agent:hover{background:var(--surface2)}
-  .squad-agent .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface3);flex-shrink:0}
-  .squad-agent .info{flex:1;min-width:0}
-  .squad-agent .name{font-size:13px;font-weight:600}
-  .squad-agent .role{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .squad-agent .status{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  .squad-agent .status.online{background:var(--success);box-shadow:0 0 4px var(--success)}
-  .squad-agent .status.busy{background:var(--warning);box-shadow:0 0 4px var(--warning)}
-  .squad-agent .status.idle{background:var(--text3)}
-
-  /* Main area */
-  .main-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2)}
-  .main-header h1{font-size:18px;font-weight:700}
-  .main-header .badge{padding:5px 12px;border-radius:100px;background:var(--surface2);font-size:12px;color:var(--text2)}
-  .map-container{padding:20px}
-  .progress-map{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto}
-  .map-node{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--surface2);cursor:pointer;transition:all 0.2s}
-  .map-node:hover{border-color:var(--surface3)}
-  .map-node.done{border-color:var(--success);background:rgba(16,185,129,0.04)}
-  .map-node.active{border-color:var(--accent);background:rgba(59,130,246,0.04)}
-  .map-node .node-num{width:32px;height:32px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
-  .map-node.done .node-num{background:var(--success);color:#fff}
-  .map-node.active .node-num{background:var(--accent);color:#fff}
-  .map-node .node-title{font-weight:600;font-size:14px;margin-bottom:3px}
-  .map-node .node-desc{font-size:12px;color:var(--text2);line-height:1.45}
-  .map-node .node-meta{display:flex;gap:10px;margin-top:8px;font-size:11px;color:var(--text3);flex-wrap:wrap}
-  .map-node .node-meta span{display:flex;align-items:center;gap:3px}
-  .map-node .checklist{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--surface2)}
-  .map-node.expanded .checklist{display:block;animation:fadeIn 0.25s ease}
-  .map-node .checklist-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px}
-  .map-node .checklist-item .chk{width:16px;height:16px;border-radius:3px;border:2px solid var(--surface3);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
-  .map-node .checklist-item.done .chk{background:var(--success);border-color:var(--success);color:#fff}
-  .map-node .checklist-item.done{color:var(--text3);text-decoration:line-through}
-
-  /* Activity panel */
-  .activity-feed{padding:12px;display:flex;flex-direction:column;gap:10px}
-  .activity-item{display:flex;gap:10px;padding:10px;border-radius:var(--radius-sm);background:var(--surface2);animation:slideInRight 0.25s ease;transition:all 0.2s}
-  .activity-item:hover{background:var(--surface3)}
-  .activity-item .act-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface3);flex-shrink:0}
-  .activity-item .act-text{font-size:12px;line-height:1.5;flex:1}
-  .activity-item .act-text strong{color:var(--text);font-weight:600}
-  .activity-item .act-time{font-size:10px;color:var(--text3);margin-top:3px}
-  .activity-item.user-msg{background:rgba(59,130,246,0.08);border-left:2px solid var(--accent)}
-  .activity-item.agent-reply{background:rgba(16,185,129,0.04);border-left:2px solid var(--success)}
-  .typing{display:none;align-items:center;gap:5px;padding:6px 10px}
-  .typing.active{display:flex}
-  .typing span{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:typing 1s ease infinite}
-  .typing span:nth-child(2){animation-delay:0.15s}
-  .typing span:nth-child(3){animation-delay:0.3s}
-
-  /* Summon Bar */
-  .summon-bar{padding:12px 16px;background:var(--surface2);border-top:1px solid var(--surface3);display:flex;gap:10px;align-items:center;flex-shrink:0}
-  .summon-input{flex:1;padding:10px 16px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text);font-size:14px;transition:all 0.2s;min-width:0}
+  /* Summon bar */
+  .summon-bar{padding:12px 20px;background:var(--surface);border-top:1px solid var(--surface2);display:flex;gap:10px;align-items:center;flex-shrink:0}
+  .summon-input{flex:1;padding:10px 16px;border-radius:100px;background:var(--surface2);border:1px solid var(--surface3);color:var(--text);font-size:14px;transition:all 0.2s;min-width:0}
   .summon-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
   .summon-input::placeholder{color:var(--text3)}
-  .summon-send{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s;flex-shrink:0}
+  .summon-send{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s;flex-shrink:0}
   .summon-send:hover{background:var(--accent2)}
-  .quick-prompts{display:flex;gap:6px;flex-wrap:wrap}
-  .quick-prompt{padding:6px 12px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text2);font-size:12px;transition:all 0.2s;white-space:nowrap}
-  .quick-prompt:hover{border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,0.08)}
-  @media(max-width:480px){.quick-prompts{display:none}}
+  .quick-pills{display:flex;gap:6px;flex-wrap:wrap}
+  .quick-pill{padding:6px 12px;border-radius:100px;background:var(--surface2);border:1px solid var(--surface3);color:var(--text2);font-size:12px;transition:all 0.2s;white-space:nowrap}
+  .quick-pill:hover{border-color:var(--accent);color:var(--accent)}
+  @media(max-width:480px){.quick-pills{display:none}}
 
-  /* Agent Modal */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
-  .modal-overlay.active{display:flex}
-  .modal{width:100%;max-width:380px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--surface2);box-shadow:var(--shadow-lg);animation:pop 0.25s ease;overflow:hidden}
-  .modal-header{padding:20px 20px 14px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--surface2)}
-  .modal-header .avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--surface2)}
-  .modal-header .info h3{font-size:18px;font-weight:700}
-  .modal-header .info p{font-size:13px;color:var(--text2);margin-top:2px}
-  .modal-body{padding:16px 20px}
-  .modal-body h4{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
-  .modal-task{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;border-bottom:1px solid var(--surface2)}
-  .modal-task:last-child{border-bottom:none}
-  .modal-task .status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
-  .modal-footer{padding:14px 20px 20px;display:flex;gap:8px}
-  .modal-btn{flex:1;padding:11px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;transition:all 0.2s}
-  .modal-btn.primary{background:var(--accent);color:#fff}
-  .modal-btn.primary:hover{background:var(--accent2)}
-  .modal-btn.secondary{background:var(--surface2);color:var(--text)}
-  .modal-btn.secondary:hover{background:var(--surface3)}
+  /* ===== WORKSPACE MODAL ===== */
+  .workspace-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:200;display:none;flex-direction:column}
+  .workspace-overlay.active{display:flex}
+  .workspace-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2);background:var(--surface);flex-shrink:0}
+  .workspace-header h2{font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+  .workspace-header .close-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:var(--surface2);color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all 0.2s}
+  .workspace-header .close-btn:hover{background:var(--surface3);color:var(--text)}
+  .workspace-body{flex:1;display:flex;overflow:hidden}
+  @media(max-width:768px){.workspace-body{flex-direction:column}}
+  .workspace-main{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+  .workspace-sidebar{width:320px;border-left:1px solid var(--surface2);background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
+  @media(max-width:768px){.workspace-sidebar{width:100%;border-left:none;border-top:1px solid var(--surface2);max-height:40vh}}
+  .ws-live-area{background:var(--surface);border-radius:var(--radius);border:1px solid var(--surface2);padding:24px;min-height:400px;position:relative;overflow:hidden}
+  .ws-live-area .live-label{position:absolute;top:12px;right:12px;padding:4px 10px;border-radius:100px;background:rgba(239,68,68,0.15);color:var(--error);font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px;animation:pulse 2s ease infinite}
+  .ws-live-area .live-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--error)}
+  .ws-comments{padding:16px;overflow-y:auto;flex:1}
+  .ws-comments h4{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+  .ws-comment{padding:10px 0;border-bottom:1px solid var(--surface2)}
+  .ws-comment:last-child{border-bottom:none}
+  .ws-comment .c-author{font-size:12px;font-weight:600;margin-bottom:2px}
+  .ws-comment .c-text{font-size:13px;color:var(--text2);line-height:1.45}
+  .ws-comment .c-time{font-size:11px;color:var(--text3);margin-top:3px}
+  .ws-comment-input{padding:12px 16px;border-top:1px solid var(--surface2)}
+  .ws-comment-input input{width:100%;padding:10px 14px;border-radius:var(--radius-sm);background:var(--surface2);border:1px solid var(--surface3);color:var(--text);font-size:13px}
+  .ws-comment-input input:focus{border-color:var(--accent)}
+  .ws-comment-input input::placeholder{color:var(--text3)}
+
+  /* Live typing effect */
+  .code-terminal{background:#0d1117;border-radius:var(--radius-sm);padding:16px;font-family:'SF Mono',Monaco,monospace;font-size:13px;line-height:1.7;color:#c9d1d9;overflow:auto;max-height:500px}
+  .code-terminal .line{display:flex}
+  .code-terminal .ln{color:#484f58;width:30px;text-align:right;margin-right:16px;flex-shrink:0}
+  .code-terminal .code{white-space:pre}
+  .code-terminal .keyword{color:#ff7b72}.code-terminal .string{color:#a5d6ff}.code-terminal .func{color:#d2a8ff}.code-terminal .comment{color:#8b949e;font-style:italic}
+  .typing-cursor{display:inline-block;width:2px;height:16px;background:var(--accent);animation:pulse 0.8s ease infinite;vertical-align:middle;margin-left:2px}
+
+  /* Wireframe live */
+  .wireframe-live{background:#fff;border-radius:var(--radius-sm);padding:20px;position:relative;overflow:hidden}
+  .wireframe-live .phone{width:240px;height:440px;border:3px solid #333;border-radius:28px;margin:0 auto;padding:12px 8px;background:#f5f5f5;position:relative}
+  .wireframe-live .phone-screen{width:100%;height:100%;background:#fff;border-radius:16px;overflow:hidden;padding:16px}
+  .wf-element{background:#e0e0e0;border-radius:4px;margin-bottom:10px;position:relative;overflow:hidden}
+  .wf-element.circle{border-radius:50%}
+  .wf-element.animated::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(59,130,246,0.3),transparent);animation:shimmer 2s infinite}
+  @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
   /* Toast */
   .toast-container{position:fixed;top:12px;right:12px;z-index:300;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:calc(100vw - 24px)}
@@ -262,7 +226,6 @@
     <div style="width:60px"></div>
   </div>
 
-  <!-- Step 1: Goal -->
   <div class="wizard-step active" id="step0">
     <h2>What do you want to build?</h2>
     <p>Pick what feels closest. Not sure? Select "Help me decide."</p>
@@ -296,7 +259,6 @@
     <button class="wizard-btn" id="btn0" onclick="nextStep()">Continue</button>
   </div>
 
-  <!-- Step 2: Idea -->
   <div class="wizard-step" id="step1">
     <h2>Tell us about your idea</h2>
     <p>In plain English — what problem are you solving, and for who?</p>
@@ -304,7 +266,6 @@
     <button class="wizard-btn" id="btn1" onclick="nextStep()">Continue</button>
   </div>
 
-  <!-- Step 3: Help Me Decide (conditional) -->
   <div class="wizard-step" id="step1-help">
     <h2>Let's figure this out together</h2>
     <p>Answer a couple quick questions and I'll suggest the best approach.</p>
@@ -337,7 +298,6 @@
     <button class="wizard-btn" id="btn1-help" onclick="finishHelpDecide()">See My Recommendation</button>
   </div>
 
-  <!-- Step 3: Strategic Paths -->
   <div class="wizard-step" id="step2">
     <h2>Here are 3 ways to build this</h2>
     <p>Pick the approach that fits your timeline and budget.</p>
@@ -370,7 +330,6 @@
     <button class="wizard-btn" id="btn2" onclick="nextStep()">Continue</button>
   </div>
 
-  <!-- Step 4: Squad Preview -->
   <div class="wizard-step" id="step3">
     <h2>Your SQUAD is ready</h2>
     <p>Here's who you'll be working with:</p>
@@ -394,136 +353,123 @@
 
 <!-- ===== DASHBOARD ===== -->
 <div id="dashboard">
-  <div class="mobile-nav">
-    <button class="mobile-nav-btn active" onclick="showPanel('squad')">Team</button>
-    <button class="mobile-nav-btn" onclick="showPanel('main')">Progress</button>
-    <button class="mobile-nav-btn" onclick="showPanel('activity')">Chat</button>
+  <div class="dash-top">
+    <h1>🎯 Your SQUAD Workspace</h1>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="status-pill"><span class="dot"></span> Live</div>
+      <div class="agent-avatars" id="topAvatars"></div>
+    </div>
   </div>
 
-  <div class="dash-content">
-    <!-- Squad Panel -->
-    <div class="panel panel-squad active" id="panelSquad">
-      <div class="panel-header"><h3>Your Team</h3></div>
-      <div class="squad-list" id="squadList"></div>
-    </div>
-
-    <!-- Main Area -->
-    <div class="panel panel-main" id="panelMain">
-      <div class="main-header">
-        <h1>Your Progress</h1>
-        <div class="badge" id="progressBadge">0% Complete</div>
-      </div>
-      <div class="map-container">
-        <div class="progress-map" id="progressMap"></div>
-      </div>
-    </div>
-
-    <!-- Activity Panel -->
-    <div class="panel panel-activity" id="panelActivity">
-      <div class="panel-header"><h3>Recent Updates</h3></div>
-      <div class="activity-feed" id="activityFeed">
-        <div class="typing" id="typingIndicator">
-          <span></span><span></span><span></span>
-          <span style="font-size:11px;color:var(--text3);margin-left:4px">Your team is getting ready...</span>
-        </div>
-      </div>
-    </div>
+  <div class="artifact-scroll">
+    <div class="artifact-grid" id="artifactGrid"></div>
   </div>
 
   <div class="summon-bar">
     <input type="text" class="summon-input" id="summonInput" placeholder="Ask your SQUAD anything..." onkeydown="if(event.key==='Enter')sendSummon()">
     <button class="summon-send" onclick="sendSummon()">→</button>
-    <div class="quick-prompts">
-      <button class="quick-prompt" onclick="quickAsk('I need a logo')">Logo</button>
-      <button class="quick-prompt" onclick="quickAsk('How do I find customers?')">Customers</button>
-      <button class="quick-prompt" onclick="quickAsk('Write my pitch')">Pitch</button>
-      <button class="quick-prompt" onclick="quickAsk('Is my app secure?')">Security</button>
+    <div class="quick-pills">
+      <button class="quick-pill" onclick="quickAsk('Make it bolder')">Make it bolder</button>
+      <button class="quick-pill" onclick="quickAsk('Simplify the flow')">Simplify the flow</button>
+      <button class="quick-pill" onclick="quickAsk('Add more color')">Add more color</button>
     </div>
   </div>
 </div>
 
-<!-- ===== AGENT MODAL ===== -->
-<div class="modal-overlay" id="agentModal" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="avatar" id="modalAvatar">🎯</div>
-      <div class="info">
-        <h3 id="modalName">Name</h3>
-        <p id="modalRole">Role</p>
+<!-- ===== WORKSPACE MODAL ===== -->
+<div class="workspace-overlay" id="workspaceModal">
+  <div class="workspace-header">
+    <h2 id="wsTitle">🔧 Working on...</h2>
+    <button class="close-btn" onclick="closeWorkspace()">✕</button>
+  </div>
+  <div class="workspace-body">
+    <div class="workspace-main" id="wsMain"></div>
+    <div class="workspace-sidebar">
+      <div class="ws-comments" id="wsComments">
+        <h4>💬 Feedback</h4>
+        <div id="wsCommentList"></div>
       </div>
-    </div>
-    <div class="modal-body">
-      <h4>Currently Working On</h4>
-      <div id="modalTasks"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-btn primary" onclick="talkToAgent()">Talk to Them</button>
-      <button class="modal-btn secondary" onclick="closeModal()">Close</button>
+      <div class="ws-comment-input">
+        <input type="text" id="wsCommentInput" placeholder="Add a suggestion..." onkeydown="if(event.key==='Enter')addWorkspaceComment()">
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 // ===== STATE =====
-let currentStep = 0, selectedGoal = null, userIdea = '', selectedPath = null;
-let clarifyAnswers = {q1:null,q2:null,q3:null};
-let squad = [], currentAgent = null;
-let mobilePanel = 'squad';
+let currentStep=0,selectedGoal=null,userIdea='',selectedPath=null;
+let clarifyAnswers={q1:null,q2:null,q3:null};
+let squad=[],activeArtifact=null;
 
-const AGENTS = [
-  {id:'planner',name:'Alex',role:'The Planner',emoji:'🎯',desc:'Maps out your strategy and keeps everything on track',color:'#3b82f6',tasks:['Reviewing your idea','Defining your first milestones','Setting up your project timeline']},
-  {id:'designer',name:'Maya',role:'The Designer',emoji:'🎨',desc:'Creates how your product looks and feels',color:'#ec4899',tasks:['Sketching your brand colors','Designing your app screens','Picking the right fonts']},
-  {id:'builder',name:'Raj',role:'The Builder',emoji:'🔧',desc:'Builds the technology behind your product',color:'#10b981',tasks:['Setting up your app foundation','Building your login system','Connecting your database']},
-  {id:'tester',name:'Sam',role:'The Tester',emoji:'🔍',desc:'Makes sure everything works perfectly',color:'#f59e0b',tasks:['Testing your signup flow','Checking for bugs','Running quality checks']},
-  {id:'marketer',name:'Zoe',role:'The Marketer',emoji:'📢',desc:'Gets your product in front of the right people',color:'#8b5cf6',tasks:['Researching your audience','Planning your launch strategy','Setting up social media']},
-  {id:'writer',name:'Noah',role:'The Writer',emoji:'✍️',desc:'Finds the right words for your product',color:'#06b6d4',tasks:['Writing your website copy','Crafting your welcome email','Creating your pitch']},
-  {id:'money',name:'Priya',role:'The Money Person',emoji:'💰',desc:'Handles pricing, revenue, and financial planning',color:'#eab308',tasks:['Analyzing competitor pricing','Building your revenue model','Planning your funding approach']},
-  {id:'organizer',name:'Omar',role:'The Organizer',emoji:'📋',desc:'Keeps your team coordinated and efficient',color:'#f97316',tasks:['Setting up your task board','Scheduling team check-ins','Tracking deliverables']}
+const AGENTS=[
+  {id:'planner',name:'Alex',role:'The Planner',emoji:'🎯',color:'#3b82f6'},
+  {id:'designer',name:'Maya',role:'The Designer',emoji:'🎨',color:'#ec4899'},
+  {id:'builder',name:'Raj',role:'The Builder',emoji:'🔧',color:'#10b981'},
+  {id:'tester',name:'Sam',role:'The Tester',emoji:'🔍',color:'#f59e0b'},
+  {id:'marketer',name:'Zoe',role:'The Marketer',emoji:'📢',color:'#8b5cf6'},
+  {id:'writer',name:'Noah',role:'The Writer',emoji:'✍️',color:'#06b6d4'},
+  {id:'money',name:'Priya',role:'The Money Person',emoji:'💰',color:'#eab308'},
+  {id:'organizer',name:'Omar',role:'The Organizer',emoji:'📋',color:'#f97316'}
 ];
 
-const MAP_DATA = [
-  {id:'idea',title:'Idea Locked In',desc:'Your vision is clear and documented',done:true,agent:'planner',items:['Problem identified','Target audience defined','Value proposition written']},
-  {id:'brand',title:'Brand & Design',desc:'Your look, feel, and first designs',done:false,agent:'designer',items:['Logo concepts created','Color palette chosen','First screen designs']},
-  {id:'mvp',title:'First Working Version',desc:'Your product lives and breathes',done:false,agent:'builder',items:['Core features built','User accounts working','Database connected']},
-  {id:'test',title:'Tested & Refined',desc:'Bug-free and ready for real users',done:false,agent:'tester',items:['All flows tested','Bugs fixed','Performance checked']},
-  {id:'launch',title:'Ready to Launch',desc:'Your go-to-market plan is set',done:false,agent:'marketer',items:['Launch date set','Marketing materials ready','First users lined up']}
+const ARTIFACTS=[
+  {id:'brand',title:'Brand Identity',desc:'Logo concepts, color palette, and typography',agent:'designer',progress:65,status:'progress',type:'design',
+   preview:'<svg viewBox="0 0 200 160" style="width:100%;height:100%"><rect x="20" y="30" width="60" height="60" rx="12" fill="#3b82f6" opacity="0.8"/><rect x="90" y="30" width="60" height="60" rx="12" fill="#ec4899" opacity="0.6"/><rect x="55" y="90" width="60" height="40" rx="8" fill="#10b981" opacity="0.5"/><text x="100" y="150" text-anchor="middle" fill="#5c6578" font-size="10">Color Palette v3</text></svg>'},
+  {id:'wireframe',title:'App Wireframes',desc:'Screen layouts and user flow diagrams',agent:'designer',progress:40,status:'progress',type:'wireframe',
+   preview:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1a1f2e"><div style="width:80px;height:140px;border:2px solid #3b82f6;border-radius:12px;padding:8px"><div style="width:100%;height:8px;background:#3b82f6;border-radius:4px;margin-bottom:6px"></div><div style="width:70%;height:6px;background:#1e283a;border-radius:3px;margin-bottom:4px"></div><div style="width:50%;height:6px;background:#1e283a;border-radius:3px;margin-bottom:4px"></div><div style="width:100%;height:40px;background:#1e283a;border-radius:4px;margin-top:8px"></div><div style="width:100%;height:20px;background:#1e283a;border-radius:4px;margin-top:6px"></div></div></div>'},
+  {id:'code',title:'App Foundation',desc:'Core files, database setup, and auth system',agent:'builder',progress:25,status:'progress',type:'code',
+   preview:'<div style="width:100%;height:100%;background:#0d1117;padding:16px;font-family:monospace;font-size:11px;color:#8b949e;line-height:1.6"><span style="color:#ff7b72">const</span> <span style="color:#79c0ff">App</span> = () => {<br>  <span style="color:#ff7b72">return</span> (<br>    &lt;<span style="color:#7ee787">AuthProvider</span>&gt;<br>      &lt;<span style="color:#7ee787">Router</span> /&gt;<br>    &lt;/<span style="color:#7ee787">AuthProvider</span>&gt;<br>  );<br>};</div>'},
+  {id:'marketing',title:'Launch Strategy',desc:'Audience research, channel plan, and ad concepts',agent:'marketer',progress:15,status:'progress',type:'marketing',
+   preview:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#1a1f2e"><div style="width:60px;height:80px;background:#1e283a;border-radius:8px;padding:8px"><div style="width:100%;height:6px;background:#3b82f6;border-radius:3px;margin-bottom:4px"></div><div style="width:80%;height:4px;background:#5c6578;border-radius:2px;margin-bottom:3px"></div><div style="width:60%;height:4px;background:#5c6578;border-radius:2px"></div></div><div style="width:60px;height:80px;background:#1e283a;border-radius:8px;padding:8px"><div style="width:100%;height:40px;background:#ec4899;border-radius:4px;margin-bottom:6px"></div><div style="width:80%;height:4px;background:#5c6578;border-radius:2px"></div></div></div>'},
+  {id:'pitch',title:'Pitch Deck',desc:'Investor-ready slides with your story and numbers',agent:'writer',progress:10,status:'progress',type:'document',
+   preview:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1a1f2e"><div style="width:120px;height:80px;background:#fff;border-radius:6px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"><div style="width:60%;height:8px;background:#0d1117;border-radius:4px;margin-bottom:8px"></div><div style="width:100%;height:4px;background:#8b949e;border-radius:2px;margin-bottom:4px"></div><div style="width:80%;height:4px;background:#8b949e;border-radius:2px;margin-bottom:4px"></div><div style="width:90%;height:4px;background:#8b949e;border-radius:2px"></div></div></div>'},
+  {id:'finance',title:'Financial Model',desc:'Revenue projections, pricing, and unit economics',agent:'money',progress:5,status:'progress',type:'spreadsheet',
+   preview:'<div style="width:100%;height:100%;background:#0d1117;padding:16px;font-family:monospace;font-size:10px;color:#c9d1d9;line-height:1.8"><div style="color:#8b949e">Revenue Model</div><div>Month 1: <span style="color:#10b981">$0</span> | Users: <span style="color:#3b82f6">0</span></div><div>Month 6: <span style="color:#10b981">$2.4K</span> | Users: <span style="color:#3b82f6">120</span></div><div>Month 12: <span style="color:#10b981">$14K</span> | Users: <span style="color:#3b82f6">850</span></div></div>'}
 ];
 
-const RESPONSES = {
-  logo:{agent:'designer',text:'I\'m on it! I\'ll create 3 logo concepts for you. What feeling do you want your brand to have — playful, professional, or bold?'},
-  design:{agent:'designer',text:'Great question about design! I\'m currently working on your color palette and first screen layouts. Want to see some early concepts?'},
-  look:{agent:'designer',text:'I\'ve been thinking about your visual style. Do you have any apps or brands you love the look of?'},
-  build:{agent:'builder',text:'I\'ve started building the foundation. Right now I\'m setting up user accounts and the main database. Everything looks solid!'},
-  code:{agent:'builder',text:'No need to worry about the technical stuff — that\'s my job! I\'m building your app with modern, reliable technology.'},
-  tech:{agent:'builder',text:'I\'m using solid, proven technology. It\'ll be fast, secure, and able to grow with you.'},
-  users:{agent:'marketer',text:'Finding your first customers is my specialty! I\'m researching where your target audience hangs out online. I\'ll have a strategy ready soon.'},
-  customer:{agent:'marketer',text:'I\'m working on a customer acquisition plan. What\'s your budget for marketing?'},
-  growth:{agent:'marketer',text:'Growth is all about the right strategy at the right time. I\'m putting together a phased plan starting with early users.'},
-  money:{agent:'money',text:'I\'ve been analyzing how similar products price themselves. Want to see some numbers?'},
-  price:{agent:'money',text:'Pricing is critical! I\'m looking at what competitors charge and what your audience is willing to pay.'},
-  revenue:{agent:'money',text:'Your revenue model is taking shape. I\'m evaluating subscription vs. one-time payment.'},
-  plan:{agent:'planner',text:'I\'ve mapped out your first 90 days. The key milestones are: finalize design, build core app, test with 10 users, then launch. Sound good?'},
-  strategy:{agent:'planner',text:'I\'m thinking about your long-term strategy. Right now we focus on proving your idea works. Once we have 100 happy users, we scale.'},
-  timeline:{agent:'planner',text:'Here\'s what I\'m thinking: Brand & design (Week 1-2), Build core app (Week 3-5), Test & refine (Week 6), Launch (Week 7). Does that feel right?'},
-  words:{agent:'writer',text:'I\'m drafting the words your users will see — from your homepage headline to button labels. The goal is making everything crystal clear.'},
-  content:{agent:'writer',text:'Content is king! I\'m writing your website copy, welcome emails, and social posts. Want to review the homepage headline?'},
-  pitch:{agent:'writer',text:'I\'d love to write your pitch! Who is your audience — investors, customers, or partners? And what makes your idea special?'},
-  test:{agent:'tester',text:'I\'m running tests on every part of your app. So far everything looks solid! I\'ll flag anything before users see it.'},
-  bug:{agent:'tester',text:'No bugs on my watch! I\'m checking every button, every form, every screen.'},
-  secure:{agent:'builder',text:'Security is my top priority. I\'m implementing bank-level encryption and secure login. Your users\' data will be safe.'},
-  safe:{agent:'builder',text:'Yes, your app will be secure. I\'m building in protection from day one.'},
-  process:{agent:'organizer',text:'I\'m keeping everyone organized! Your task board is set up and deadlines are clear.'},
-  organize:{agent:'organizer',text:'I\'ve set up your project dashboard. You can see what everyone is working on.'}
+const WS_DATA={
+  code:{lines:[
+    {ln:1,code:'<span class="keyword">import</span> { useState, useEffect } <span class="keyword">from</span> <span class="string">"react"</span>;'},
+    {ln:2,code:'<span class="keyword">import</span> { AuthProvider } <span class="keyword">from</span> <span class="string">"./auth/AuthProvider"</span>;'},
+    {ln:3,code:'<span class="keyword">import</span> { AppRouter } <span class="keyword">from</span> <span class="string">"./router/AppRouter"</span>;'},
+    {ln:4,code:''},
+    {ln:5,code:'<span class="comment">// Main application entry point</span>'},
+    {ln:6,code:'<span class="keyword">export const</span> <span class="func">App</span> = () => {'},
+    {ln:7,code:'  <span class="keyword">const</span> [user, setUser] = <span class="func">useState</span>(<span class="keyword">null</span>);'},
+    {ln:8,code:''},
+    {ln:9,code:'  <span class="func">useEffect</span>(() => {'},
+    {ln:10,code:'    <span class="comment">// Check for existing session</span>'},
+    {ln:11,code:'    auth.<span class="func">getSession</span>().<span class="func">then</span>(setUser);'},
+    {ln:12,code:'  }, []);'},
+    {ln:13,code:''},
+    {ln:14,code:'  <span class="keyword">return</span> ('},
+    {ln:15,code:'    &lt;<span class="func">AuthProvider</span> value={user}&gt;'},
+    {ln:16,code:'      &lt;<span class="func">AppRouter</span> isAuthenticated={!!user} /&gt;'},
+    {ln:17,code:'    &lt;/<span class="func">AuthProvider</span>&gt;'},
+    {ln:18,code:'  );'},
+    {ln:19,code:'};'}
+  ], comments:[
+    {author:'Raj',text:'Setting up the auth foundation. Next I\'ll wire up the database connection.',time:'2 min ago'},
+    {author:'You',text:'Looks clean! Can we add social login too?',time:'Just now'}
+  ]},
+  wireframe:{elements:[
+    {type:'header',w:'100%',h:40,bg:'#e0e0e0',label:'Header'},
+    {type:'avatar',w:40,h:40,bg:'#d0d0d0',circle:true,label:'User Avatar'},
+    {type:'text',w:'70%',h:20,bg:'#e8e8e8',label:'Title'},
+    {type:'card',w:'100%',h:80,bg:'#f0f0f0',label:'Feature Card'},
+    {type:'button',w:'50%',h:36,bg:'#3b82f6',label:'CTA Button'},
+    {type:'nav',w:'100%',h:50,bg:'#f5f5f5',label:'Bottom Nav'}
+  ], comments:[
+    {author:'Maya',text:'Working on the home screen layout. Thinking of a card-based feed.',time:'5 min ago'}
+  ]},
+  design:{comments:[
+    {author:'Maya',text:'Settled on a modern blue-purple gradient for the primary brand.',time:'10 min ago'},
+    {author:'You',text:'Love the blue! Can we make the accent more vibrant?',time:'Just now'}
+  ]}
 };
 
-const QUICK_RESPONSES = {
-  'I need a logo':{agent:'designer',text:'Perfect! I\'ll start working on logo concepts right now. I\'ll create 3 different directions and show them to you shortly.',toast:'Designer is sketching your logo concepts 🎨'},
-  'How do I find customers?':{agent:'marketer',text:'I\'m putting together a customer acquisition plan. I\'ll identify the best channels for your audience and budget.',toast:'Marketer is building your growth strategy 📢'},
-  'Write my pitch':{agent:'writer',text:'I\'d love to! To write the best pitch, tell me: Are you pitching to investors, customers, or partners? And what\'s the one thing that makes your idea impossible to ignore?',toast:'Writer is drafting your pitch ✍️'},
-  'Is my app secure?':{agent:'builder',text:'Absolutely. I\'m building security into every layer — encrypted passwords, protected data, and secure connections. I\'ll run a full security check before launch.',toast:'Builder is running a security check 🔧'}
-};
-
-// ===== WIZARD NAVIGATION =====
+// ===== WIZARD =====
 function startWizard(){
   document.getElementById('landing').classList.add('hidden');
   document.getElementById('wizard').classList.add('active');
@@ -588,9 +534,7 @@ function prevStep(){
 }
 
 function backFromHelp(){
-  currentStep=0;
-  selectedGoal=null;
-  clarifyAnswers={q1:null,q2:null,q3:null};
+  currentStep=0; selectedGoal=null; clarifyAnswers={q1:null,q2:null,q3:null};
   document.getElementById('step1-help').classList.remove('active');
   document.getElementById('step0').classList.add('active');
   document.getElementById('wizardBack').onclick=prevStep;
@@ -601,7 +545,6 @@ function backFromHelp(){
   updateWizardUI();
 }
 
-// ===== HELP ME DECIDE =====
 function selectClarify(q,el,val){
   document.querySelectorAll('#'+q+' .clarify-option').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
@@ -614,7 +557,7 @@ function finishHelpDecide(){
   if(!(clarifyAnswers.q1&&clarifyAnswers.q2&&clarifyAnswers.q3)) return;
   const rec=getRecommendation();
   selectedGoal=rec.type;
-  currentStep=1; // FIX: advance past help step
+  currentStep=1;
   document.getElementById('step1-help').classList.remove('active');
   document.getElementById('step1').classList.add('active');
   document.getElementById('wizardBack').onclick=prevStep;
@@ -630,7 +573,6 @@ function getRecommendation(){
   return {type:'web',label:'A Website'};
 }
 
-// ===== STRATEGIC PATHS =====
 function selectPath(idx,el){
   selectedPath=idx;
   document.querySelectorAll('.path-card').forEach(c=>c.classList.remove('selected'));
@@ -639,8 +581,7 @@ function selectPath(idx,el){
 }
 
 function renderSquadPreview(){
-  const container=document.getElementById('squadPreview');
-  container.innerHTML=AGENTS.map(a=>`
+  document.getElementById('squadPreview').innerHTML=AGENTS.map(a=>`
     <div class="wizard-card" style="padding:14px">
       <div style="font-size:24px;margin-bottom:6px">${a.emoji}</div>
       <h3 style="font-size:14px">${a.name}</h3>
@@ -671,146 +612,165 @@ function launchSquad(){
 // ===== DASHBOARD =====
 function initDashboard(){
   squad=AGENTS.map(a=>({...a,status:Math.random()>0.3?'online':'busy'}));
-  renderSquad();
-  renderMap();
-  showToast('Your SQUAD is ready to work! 🎯','info');
-  setTimeout(()=>addActivity('planner','I\'ve reviewed your idea and set up the project plan. Let\'s build something great!','agent-reply'),600);
-  setTimeout(()=>addActivity('designer','I\'m starting on your brand look. I\'ll have concepts ready soon.','agent-reply'),1600);
-  setTimeout(()=>addActivity('builder','Foundation is going in place. Everything looks solid so far.','agent-reply'),2800);
+  document.getElementById('topAvatars').innerHTML=squad.map(a=>
+    `<div class="agent-avatar" style="background:${a.color}22" title="${a.name} — ${a.role}" onclick="showToast('${a.name} is ${a.status==='online'?'online':'busy'}','info')">${a.emoji}</div>`
+  ).join('');
+  renderArtifacts();
+  showToast('Your SQUAD is working! Click any card to see live progress.','info');
+  startLiveUpdates();
 }
 
-function renderSquad(){
-  document.getElementById('squadList').innerHTML=squad.map(a=>`
-    <div class="squad-agent" onclick="openAgentModal('${a.id}')">
-      <div class="avatar" style="background:${a.color}22">${a.emoji}</div>
-      <div class="info">
-        <div class="name">${a.name}</div>
-        <div class="role">${a.role}</div>
+function renderArtifacts(){
+  const grid=document.getElementById('artifactGrid');
+  grid.innerHTML=ARTIFACTS.map(art=>{
+    const agent=AGENTS.find(a=>a.id===art.agent);
+    const statusLabel=art.status==='done'?'Done':art.status==='review'?'Ready for Review':'In Progress';
+    return `
+      <div class="artifact-card" onclick="openWorkspace('${art.id}')">
+        <div class="art-preview">
+          ${art.preview}
+          <span class="art-badge ${art.status}">${statusLabel}</span>
+        </div>
+        <div class="art-body">
+          <div class="art-progress"><div class="art-progress-bar" style="width:${art.progress}%"></div></div>
+          <div class="art-title">${art.title}</div>
+          <div class="art-desc">${art.desc}</div>
+          <div class="art-footer">
+            <div class="art-agent"><div class="ava" style="background:${agent.color}22">${agent.emoji}</div>${agent.name}</div>
+            <span class="art-action">View Live →</span>
+          </div>
+        </div>
       </div>
-      <div class="status ${a.status}"></div>
+    `;
+  }).join('');
+}
+
+function startLiveUpdates(){
+  setInterval(()=>{
+    ARTIFACTS.forEach(art=>{
+      if(art.progress<95 && Math.random()>0.6){
+        art.progress=Math.min(art.progress+Math.floor(Math.random()*4)+1,95);
+        const card=document.querySelector(`.artifact-card[onclick*="${art.id}"]`);
+        if(card){
+          card.querySelector('.art-progress-bar').style.width=art.progress+'%';
+          if(art.progress>=90){
+            art.status='review';
+            card.querySelector('.art-badge').className='art-badge review';
+            card.querySelector('.art-badge').textContent='Ready for Review';
+          }
+        }
+      }
+    });
+  },4000);
+}
+
+// ===== WORKSPACE =====
+function openWorkspace(artId){
+  activeArtifact=ARTIFACTS.find(a=>a.id===artId);
+  if(!activeArtifact) return;
+  const agent=AGENTS.find(a=>a.id===activeArtifact.agent);
+  document.getElementById('wsTitle').innerHTML=`${agent.emoji} ${activeArtifact.title}`;
+  const main=document.getElementById('wsMain');
+
+  if(activeArtifact.type==='code'){
+    main.innerHTML=`<div class="ws-live-area"><div class="live-label">LIVE</div><div class="code-terminal" id="codeTerminal"></div></div>`;
+    startCodeTyping();
+  }else if(activeArtifact.type==='wireframe'){
+    main.innerHTML=`<div class="ws-live-area"><div class="live-label">LIVE</div><div class="wireframe-live" id="wireframeLive"><div class="phone"><div class="phone-screen" id="phoneScreen"></div></div></div></div>`;
+    startWireframeBuild();
+  }else{
+    main.innerHTML=`<div class="ws-live-area"><div class="live-label">LIVE</div><div style="display:flex;align-items:center;justify-content:center;height:300px;color:var(--text2);font-size:14px">${activeArtifact.preview}<div style="position:absolute;bottom:20px;left:20px;right:20px;padding:16px;background:var(--surface);border-radius:var(--radius-sm)"><div style="font-weight:600;margin-bottom:4px">${agent.name} is working on this</div><div style="font-size:13px;color:var(--text2)">Check back in a few minutes to see the latest version.</div></div></div></div>`;
+  }
+
+  renderComments(activeArtifact.type);
+  document.getElementById('workspaceModal').classList.add('active');
+}
+
+function startCodeTyping(){
+  const term=document.getElementById('codeTerminal');
+  const lines=WS_DATA.code.lines;
+  let idx=0;
+  function typeLine(){
+    if(idx>=lines.length){
+      const cursor=document.createElement('span');
+      cursor.className='typing-cursor';
+      term.appendChild(cursor);
+      return;
+    }
+    const div=document.createElement('div');
+    div.className='line';
+    div.innerHTML=`<span class="ln">${lines[idx].ln}</span><span class="code">${lines[idx].code}</span>`;
+    term.appendChild(div);
+    term.scrollTop=term.scrollHeight;
+    idx++;
+    setTimeout(typeLine,200+Math.random()*400);
+  }
+  typeLine();
+}
+
+function startWireframeBuild(){
+  const screen=document.getElementById('phoneScreen');
+  const els=WS_DATA.wireframe.elements;
+  let idx=0;
+  function addEl(){
+    if(idx>=els.length) return;
+    const e=els[idx];
+    const div=document.createElement('div');
+    div.className='wf-element animated'+(e.circle?' circle':'');
+    div.style.cssText=`width:${e.w};height:${e.h};background:${e.bg}`;
+    if(e.type==='button') div.style.cssText+=`;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600`;
+    if(e.type==='button') div.textContent=e.label;
+    screen.appendChild(div);
+    idx++;
+    setTimeout(addEl,800+Math.random()*600);
+  }
+  addEl();
+}
+
+function renderComments(type){
+  const list=document.getElementById('wsCommentList');
+  const data=WS_DATA[type]||WS_DATA.design;
+  const comments=data.comments||[];
+  list.innerHTML=comments.map(c=>`
+    <div class="ws-comment">
+      <div class="c-author">${c.author}</div>
+      <div class="c-text">${c.text}</div>
+      <div class="c-time">${c.time}</div>
     </div>
   `).join('');
 }
 
-function renderMap(){
-  const map=document.getElementById('progressMap');
-  let doneCount=MAP_DATA.filter(n=>n.done).length;
-  document.getElementById('progressBadge').textContent=Math.round((doneCount/MAP_DATA.length)*100)+'% Complete';
-  map.innerHTML=MAP_DATA.map((node,i)=>`
-    <div class="map-node ${node.done?'done':i===doneCount?'active':''}" id="node-${node.id}" onclick="toggleNode('${node.id}')">
-      <div class="node-num">${node.done?'✓':i+1}</div>
-      <div style="flex:1;min-width:0">
-        <div class="node-title">${node.title}</div>
-        <div class="node-desc">${node.desc}</div>
-        <div class="node-meta">
-          <span>${AGENTS.find(a=>a.id===node.agent)?.emoji} ${AGENTS.find(a=>a.id===node.agent)?.name}</span>
-          <span>${node.done?'Done':i===doneCount?'In Progress':'Up Next'}</span>
-        </div>
-        <div class="checklist">
-          ${node.items.map(item=>`
-            <div class="checklist-item ${node.done?'done':''}">
-              <div class="chk">${node.done?'✓':''}</div>
-              <span>${item}</span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function toggleNode(id){
-  document.getElementById('node-'+id).classList.toggle('expanded');
-}
-
-// ===== ACTIVITY =====
-function addActivity(agentId,text,type='agent-reply'){
-  const feed=document.getElementById('activityFeed');
-  const agent=AGENTS.find(a=>a.id===agentId);
+function addWorkspaceComment(){
+  const input=document.getElementById('wsCommentInput');
+  const text=input.value.trim();
+  if(!text) return;
+  const list=document.getElementById('wsCommentList');
   const div=document.createElement('div');
-  div.className=`activity-item ${type}`;
-  div.innerHTML=`<div class="act-avatar" style="background:${agent.color}22">${agent.emoji}</div><div class="act-text"><strong>${agent.name}</strong> ${text}<div class="act-time">Just now</div></div>`;
-  feed.appendChild(div);
-  feed.scrollTop=feed.scrollHeight;
-  while(feed.children.length>25) feed.removeChild(feed.firstChild);
+  div.className='ws-comment';
+  div.innerHTML=`<div class="c-author" style="color:var(--accent)">You</div><div class="c-text">${text}</div><div class="c-time">Just now</div>`;
+  list.appendChild(div);
+  list.scrollTop=list.scrollHeight;
+  input.value='';
+  showToast('Feedback sent to '+AGENTS.find(a=>a.id===activeArtifact.agent).name,'success');
 }
 
-function addUserMessage(text){
-  const feed=document.getElementById('activityFeed');
-  const div=document.createElement('div');
-  div.className='activity-item user-msg';
-  div.innerHTML=`<div class="act-avatar" style="background:var(--accent-glow)">👤</div><div class="act-text"><strong>You</strong> ${text}<div class="act-time">Just now</div></div>`;
-  feed.appendChild(div);
-  feed.scrollTop=feed.scrollHeight;
+function closeWorkspace(){
+  document.getElementById('workspaceModal').classList.remove('active');
+  activeArtifact=null;
 }
 
-// ===== SUMMON =====
+// ===== CHAT =====
 function sendSummon(){
   const input=document.getElementById('summonInput');
   const text=input.value.trim();
   if(!text) return;
-  addUserMessage(text);
   input.value='';
-  const typing=document.getElementById('typingIndicator');
-  typing.classList.add('active');
-  const lower=text.toLowerCase();
-  let match=null;
-  for(const key in RESPONSES){if(lower.includes(key)){match=RESPONSES[key];break;}}
-  const delay=700+Math.random()*1000;
-  setTimeout(()=>{
-    typing.classList.remove('active');
-    if(match) addActivity(match.agent,match.text);
-    else addActivity('planner','That\'s a great question! I\'m connecting you with the right team member. Try asking about your logo, finding customers, or your launch timeline.');
-  },delay);
+  showToast('Message sent to your SQUAD','info');
 }
 
 function quickAsk(text){
-  addUserMessage(text);
-  const typing=document.getElementById('typingIndicator');
-  typing.classList.add('active');
-  const qr=QUICK_RESPONSES[text];
-  const delay=500+Math.random()*700;
-  setTimeout(()=>{
-    typing.classList.remove('active');
-    addActivity(qr.agent,qr.text);
-    if(qr.toast) showToast(qr.toast,'success');
-  },delay);
-}
-
-// ===== AGENT MODAL =====
-function openAgentModal(id){
-  currentAgent=id;
-  const a=AGENTS.find(x=>x.id===id);
-  document.getElementById('modalAvatar').textContent=a.emoji;
-  document.getElementById('modalAvatar').style.background=a.color+'22';
-  document.getElementById('modalName').textContent=a.name;
-  document.getElementById('modalRole').textContent=a.role+' — '+a.desc;
-  document.getElementById('modalTasks').innerHTML=a.tasks.map(t=>`<div class="modal-task"><div class="status-dot"></div><span>${t}</span></div>`).join('');
-  document.getElementById('agentModal').classList.add('active');
-}
-
-function closeModal(e){
-  if(!e||e.target.id==='agentModal') document.getElementById('agentModal').classList.remove('active');
-}
-
-function talkToAgent(){
-  closeModal();
-  if(currentAgent){
-    const a=AGENTS.find(x=>x.id===currentAgent);
-    document.getElementById('summonInput').focus();
-    showToast(`Ask ${a.name} anything in the chat below`,'info');
-  }
-}
-
-// ===== MOBILE PANELS =====
-function showPanel(name){
-  mobilePanel=name;
-  document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  if(name==='squad') document.getElementById('panelSquad').classList.add('active');
-  if(name==='main') document.getElementById('panelMain').classList.add('active');
-  if(name==='activity') document.getElementById('panelActivity').classList.add('active');
+  document.getElementById('summonInput').value=text;
+  sendSummon();
 }
 
 // ===== TOASTS =====
@@ -823,9 +783,6 @@ function showToast(text,type='info'){
   container.appendChild(div);
   setTimeout(()=>{div.classList.add('out');setTimeout(()=>div.remove(),300);},3500);
 }
-
-// ===== KEYBOARD =====
-document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
 </script>
 </body>
 </html>
