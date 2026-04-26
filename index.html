@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQUAD — Your Startup Team</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#080c14;--surface:#0f1525;--surface2:#161d2f;--surface3:#1e2640;
+    --text:#e8ecf3;--text2:#9aa3b2;--text3:#5c6575;
+    --accent:#3b82f6;--accent2:#60a5fa;--accent-glow:rgba(59,130,246,0.3);
+    --success:#10b981;--warning:#f59e0b;--error:#ef4444;
+    --radius:16px;--radius-sm:10px;
+    --shadow:0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg:0 8px 48px rgba(0,0,0,0.5);
+  }
+  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none;outline:none}
+  input{font-family:inherit;outline:none}
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  @keyframes glow{0%,100%{box-shadow:0 0 20px var(--accent-glow)}50%{box-shadow:0 0 40px var(--accent-glow),0 0 60px rgba(59,130,246,0.15)}}
+  @keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes toastIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
+  @keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100%)}}
+  @keyframes ring{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+  @keyframes pop{0%{transform:scale(0.8);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+  .fade-in{animation:fadeIn 0.5s ease forwards}
+  .slide-right{animation:slideInRight 0.4s ease forwards}
+  .slide-left{animation:slideInLeft 0.4s ease forwards}
+
+  /* ===== LANDING ===== */
+  #landing{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:100;background:radial-gradient(ellipse at 50% 30%,#0d1a33 0%,var(--bg) 60%);transition:opacity 0.6s,visibility 0.6s}
+  #landing.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .landing-logo{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;margin-bottom:28px;box-shadow:0 8px 32px var(--accent-glow);animation:pop 0.6s ease}
+  .landing-title{font-size:clamp(36px,6vw,64px);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;line-height:1.1}
+  .landing-title span{background:linear-gradient(90deg,var(--accent),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .landing-subtitle{font-size:clamp(16px,2.5vw,20px);color:var(--text2);max-width:480px;line-height:1.6;margin-bottom:40px;padding:0 24px}
+  .landing-btn{padding:16px 48px;border-radius:100px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;font-size:17px;font-weight:600;box-shadow:0 4px 24px var(--accent-glow);transition:all 0.3s}
+  .landing-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px var(--accent-glow)}
+  .landing-btn:active{transform:translateY(0)}
+  .landing-trust{margin-top:48px;display:flex;gap:32px;color:var(--text3);font-size:13px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .landing-trust span{display:flex;align-items:center;gap:6px}
+
+  /* ===== WIZARD ===== */
+  #wizard{position:fixed;inset:0;display:none;flex-direction:column;z-index:90;background:var(--bg);padding:0}
+  #wizard.active{display:flex}
+  .wizard-header{padding:24px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2)}
+  .wizard-back{padding:8px 16px;border-radius:var(--radius-sm);background:var(--surface2);color:var(--text2);font-size:14px;transition:all 0.2s}
+  .wizard-back:hover{background:var(--surface3);color:var(--text)}
+  .wizard-progress{display:flex;gap:8px;align-items:center}
+  .wizard-dot{width:10px;height:10px;border-radius:50%;background:var(--surface3);transition:all 0.3s}
+  .wizard-dot.active{background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+  .wizard-dot.done{background:var(--success)}
+  .wizard-step{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto;animation:fadeIn 0.4s ease}
+  .wizard-step.active{display:flex}
+  .wizard-step h2{font-size:clamp(26px,4vw,36px);font-weight:700;margin-bottom:8px;text-align:center}
+  .wizard-step p{color:var(--text2);font-size:16px;margin-bottom:32px;text-align:center;max-width:500px}
+  .wizard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:640px}
+  .wizard-card{padding:28px 24px;border-radius:var(--radius);background:var(--surface);border:2px solid transparent;cursor:pointer;transition:all 0.25s;text-align:center}
+  .wizard-card:hover{border-color:var(--surface3);transform:translateY(-3px);box-shadow:var(--shadow)}
+  .wizard-card.selected{border-color:var(--accent);background:var(--surface2);box-shadow:0 0 0 3px var(--accent-glow)}
+  .wizard-card .icon{font-size:36px;margin-bottom:12px}
+  .wizard-card h3{font-size:17px;font-weight:600;margin-bottom:6px}
+  .wizard-card p{font-size:14px;color:var(--text2);margin:0}
+  .wizard-input{width:100%;max-width:480px;padding:16px 20px;border-radius:var(--radius-sm);background:var(--surface);border:2px solid var(--surface2);color:var(--text);font-size:16px;transition:all 0.2s}
+  .wizard-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+  .wizard-input::placeholder{color:var(--text3)}
+  .wizard-btn{margin-top:32px;padding:14px 40px;border-radius:100px;background:var(--accent);color:#fff;font-size:16px;font-weight:600;transition:all 0.2s;opacity:0.5;pointer-events:none}
+  .wizard-btn.enabled{opacity:1;pointer-events:auto}
+  .wizard-btn.enabled:hover{background:var(--accent2);transform:translateY(-2px)}
+
+  /* ===== ASSEMBLY ===== */
+  #assembly{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:95;background:var(--bg);text-align:center}
+  #assembly.active{display:flex}
+  .assembly-ring{width:120px;height:120px;border-radius:50%;border:4px solid var(--surface2);border-top-color:var(--accent);animation:ring 1.2s linear infinite;margin-bottom:32px}
+  .assembly-title{font-size:28px;font-weight:700;margin-bottom:12px}
+  .assembly-text{color:var(--text2);font-size:16px;max-width:400px;line-height:1.6}
+  .assembly-agents{display:flex;gap:-8px;margin-top:32px}
+  .assembly-agent{width:48px;height:48px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-left:-8px;border:3px solid var(--bg);animation:pop 0.4s ease backwards}
+  .assembly-agent:nth-child(1){animation-delay:0.1s}
+  .assembly-agent:nth-child(2){animation-delay:0.2s}
+  .assembly-agent:nth-child(3){animation-delay:0.3s}
+  .assembly-agent:nth-child(4){animation-delay:0.4s}
+
+  /* ===== DASHBOARD ===== */
+  #dashboard{position:fixed;inset:0;display:none;grid-template-columns:280px 1fr 320px;grid-template-rows:1fr auto;z-index:80;background:var(--bg)}
+  #dashboard.active{display:grid}
+  @media(max-width:1024px){#dashboard{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}}
+
+  /* Squad Panel */
+  .squad-panel{background:var(--surface);border-right:1px solid var(--surface2);display:flex;flex-direction:column;overflow:hidden}
+  .squad-header{padding:20px 20px 12px}
+  .squad-header h3{font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+  .squad-list{flex:1;overflow-y:auto;padding:0 12px 12px}
+  .squad-agent{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;margin-bottom:4px}
+  .squad-agent:hover{background:var(--surface2)}
+  .squad-agent .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--surface3);flex-shrink:0}
+  .squad-agent .info{flex:1;min-width:0}
+  .squad-agent .name{font-size:14px;font-weight:600}
+  .squad-agent .role{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .squad-agent .status{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .squad-agent .status.online{background:var(--success);box-shadow:0 0 6px var(--success)}
+  .squad-agent .status.busy{background:var(--warning);box-shadow:0 0 6px var(--warning)}
+  .squad-agent .status.idle{background:var(--text3)}
+
+  /* Main Area */
+  .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+  .main-header{padding:20px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface2)}
+  .main-header h1{font-size:22px;font-weight:700}
+  .main-header .badge{padding:6px 14px;border-radius:100px;background:var(--surface2);font-size:13px;color:var(--text2)}
+  .map-container{flex:1;padding:28px;overflow-y:auto}
+  .progress-map{display:flex;flex-direction:column;gap:20px;max-width:600px;margin:0 auto}
+  .map-node{display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--surface2);cursor:pointer;transition:all 0.25s;position:relative}
+  .map-node:hover{border-color:var(--surface3);transform:translateX(4px)}
+  .map-node.done{border-color:var(--success);background:rgba(16,185,129,0.05)}
+  .map-node.active{border-color:var(--accent);background:rgba(59,130,246,0.05);box-shadow:0 0 20px var(--accent-glow)}
+  .map-node .node-num{width:36px;height:36px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+  .map-node.done .node-num{background:var(--success);color:#fff}
+  .map-node.active .node-num{background:var(--accent);color:#fff}
+  .map-node .node-content{flex:1}
+  .map-node .node-title{font-weight:600;margin-bottom:4px}
+  .map-node .node-desc{font-size:13px;color:var(--text2);line-height:1.5}
+  .map-node .node-meta{display:flex;gap:12px;margin-top:10px;font-size:12px;color:var(--text3)}
+  .map-node .node-meta span{display:flex;align-items:center;gap:4px}
+  .map-node .checklist{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--surface2)}
+  .map-node.expanded .checklist{display:block;animation:fadeIn 0.3s ease}
+  .map-node .checklist-item{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px}
+  .map-node .checklist-item .chk{width:18px;height:18px;border-radius:4px;border:2px solid var(--surface3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+  .map-node .checklist-item.done .chk{background:var(--success);border-color:var(--success);color:#fff}
+  .map-node .checklist-item.done{color:var(--text3);text-decoration:line-through}
+
+  /* Activity Panel */
+  .activity-panel{background:var(--surface);border-left:1px solid var(--surface2);display:flex;flex-direction:column;overflow:hidden}
+  .activity-header{padding:20px 20px 12px;border-bottom:1px solid var(--surface2)}
+  .activity-header h3{font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+  .activity-feed{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .activity-item{display:flex;gap:12px;padding:12px;border-radius:var(--radius-sm);background:var(--surface2);animation:slideInRight 0.3s ease;transition:all 0.3s}
+  .activity-item:hover{background:var(--surface3)}
+  .activity-item .act-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface3);flex-shrink:0}
+  .activity-item .act-text{font-size:13px;line-height:1.5;flex:1}
+  .activity-item .act-text strong{color:var(--text);font-weight:600}
+  .activity-item .act-time{font-size:11px;color:var(--text3);margin-top:4px}
+  .activity-item.user-msg{background:rgba(59,130,246,0.1);border-left:3px solid var(--accent)}
+  .activity-item.agent-reply{background:rgba(16,185,129,0.05);border-left:3px solid var(--success)}
+
+  /* Summon Bar */
+  .summon-bar{grid-column:1/-1;padding:16px 24px;background:var(--surface2);border-top:1px solid var(--surface3);display:flex;gap:12px;align-items:center}
+  .summon-input{flex:1;padding:12px 18px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text);font-size:15px;transition:all 0.2s}
+  .summon-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+  .summon-input::placeholder{color:var(--text3)}
+  .summon-send{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all 0.2s;flex-shrink:0}
+  .summon-send:hover{background:var(--accent2);transform:scale(1.05)}
+  .quick-prompts{display:flex;gap:8px;flex-wrap:wrap}
+  .quick-prompt{padding:8px 16px;border-radius:100px;background:var(--surface);border:1px solid var(--surface3);color:var(--text2);font-size:13px;transition:all 0.2s;white-space:nowrap}
+  .quick-prompt:hover{border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,0.1)}
+
+  /* Agent Detail Modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+  .modal-overlay.active{display:flex}
+  .modal{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--surface2);box-shadow:var(--shadow-lg);animation:pop 0.3s ease;overflow:hidden}
+  .modal-header{padding:24px 24px 16px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--surface2)}
+  .modal-header .avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--surface2)}
+  .modal-header .info h3{font-size:20px;font-weight:700}
+  .modal-header .info p{font-size:14px;color:var(--text2);margin-top:2px}
+  .modal-body{padding:20px 24px}
+  .modal-body h4{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+  .modal-task{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px;border-bottom:1px solid var(--surface2)}
+  .modal-task:last-child{border-bottom:none}
+  .modal-task .status-dot{width:8px;height:8px;border-radius:50%}
+  .modal-footer{padding:16px 24px 24px;display:flex;gap:10px}
+  .modal-btn{flex:1;padding:12px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;transition:all 0.2s}
+  .modal-btn.primary{background:var(--accent);color:#fff}
+  .modal-btn.primary:hover{background:var(--accent2)}
+  .modal-btn.secondary{background:var(--surface2);color:var(--text)}
+  .modal-btn.secondary:hover{background:var(--surface3)}
+  .modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--surface2);color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all 0.2s}
+  .modal-close:hover{background:var(--surface3);color:var(--text)}
+
+  /* Toast */
+  .toast-container{position:fixed;top:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+  .toast{pointer-events:auto;padding:14px 20px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--surface2);box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;animation:toastIn 0.4s ease;max-width:360px;font-size:14px}
+  .toast.out{animation:toastOut 0.4s ease forwards}
+  .toast .icon{font-size:20px}
+  .toast.success{border-color:var(--success)}
+  .toast.info{border-color:var(--accent)}
+  .toast.warning{border-color:var(--warning)}
+
+  /* Typing indicator */
+  .typing{display:none;align-items:center;gap:6px;padding:8px 12px}
+  .typing.active{display:flex}
+  .typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:typing 1s ease infinite}
+  .typing span:nth-child(2){animation-delay:0.15s}
+  .typing span:nth-child(3){animation-delay:0.3s}
+</style>
+</head>
+<body>
+
+<!-- ===== TOASTS ===== -->
+<div class="toast-container" id="toasts"></div>
+
+<!-- ===== LANDING ===== -->
+<div id="landing">
+  <div class="landing-logo">S</div>
+  <h1 class="landing-title">Build your startup<br>with your own <span>SQUAD</span></h1>
+  <p class="landing-subtitle">You bring the idea. We bring the team. A full startup crew — planner, designer, builder, marketer, and more — working together to turn your vision into reality.</p>
+  <button class="landing-btn" onclick="startWizard()">Get Started — It's Free</button>
+  <div class="landing-trust">
+    <span>✓ No coding needed</span>
+    <span>✓ No credit card</span>
+    <span>✓ Ready in minutes</span>
+  </div>
+</div>
+
+<!-- ===== WIZARD ===== -->
+<div id="wizard">
+  <div class="wizard-header">
+    <button class="wizard-back" id="wizardBack" onclick="prevStep()">← Back</button>
+    <div class="wizard-progress">
+      <div class="wizard-dot active" id="dot0"></div>
+      <div class="wizard-dot" id="dot1"></div>
+      <div class="wizard-dot" id="dot2"></div>
+    </div>
+    <div style="width:60px"></div>
+  </div>
+
+  <!-- Step 1: Goal -->
+  <div class="wizard-step active" id="step0">
+    <h2>What do you want to build?</h2>
+    <p>Pick the option that feels closest to your idea. Don't worry — you can change this later.</p>
+    <div class="wizard-grid">
+      <div class="wizard-card" onclick="selectGoal('app',this)">
+        <div class="icon">📱</div>
+        <h3>A Mobile App</h3>
+        <p>Something people download and use on their phones</p>
+      </div>
+      <div class="wizard-card" onclick="selectGoal('web',this)">
+        <div class="icon">🌐</div>
+        <h3>A Website</h3>
+        <p>A site people visit in their browser</p>
+      </div>
+      <div class="wizard-card" onclick="selectGoal('market',this)">
+        <div class="icon">🛒</div>
+        <h3>A Marketplace</h3>
+        <p>Connect buyers and sellers</p>
+      </div>
+      <div class="wizard-card" onclick="selectGoal('community',this)">
+        <div class="icon">🤝</div>
+        <h3>A Community</h3>
+        <p>Bring people together around a shared interest</p>
+      </div>
+    </div>
+    <button class="wizard-btn" id="btn0" onclick="nextStep()">Continue</button>
+  </div>
+
+  <!-- Step 2: Idea -->
+  <div class="wizard-step" id="step1">
+    <h2>Tell us about your idea</h2>
+    <p>In plain English — no need to be technical. What's the problem you're solving?</p>
+    <input type="text" class="wizard-input" id="ideaInput" placeholder="e.g. An app that helps dog owners find trusted pet sitters nearby" oninput="checkIdea()">
+    <button class="wizard-btn" id="btn1" onclick="nextStep()">Continue</button>
+  </div>
+
+  <!-- Step 3: Confirm -->
+  <div class="wizard-step" id="step2">
+    <h2>Your SQUAD is ready</h2>
+    <p>We've assembled a team of specialists based on what you're building. Here's who you'll be working with:</p>
+    <div class="wizard-grid" id="squadPreview" style="max-width:500px">
+      <!-- Filled by JS -->
+    </div>
+    <button class="wizard-btn enabled" onclick="launchSquad()">Meet My SQUAD →</button>
+  </div>
+</div>
+
+<!-- ===== ASSEMBLY ===== -->
+<div id="assembly">
+  <div class="assembly-ring"></div>
+  <h2 class="assembly-title">Assembling your SQUAD...</h2>
+  <p class="assembly-text" id="assemblyText">Finding the right specialists for your idea</p>
+  <div class="assembly-agents">
+    <div class="assembly-agent">🎯</div>
+    <div class="assembly-agent">🎨</div>
+    <div class="assembly-agent">🔧</div>
+    <div class="assembly-agent">📢</div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard">
+  <!-- Squad Panel -->
+  <div class="squad-panel">
+    <div class="squad-header">
+      <h3>Your Team</h3>
+    </div>
+    <div class="squad-list" id="squadList"></div>
+  </div>
+
+  <!-- Main Area -->
+  <div class="main-area">
+    <div class="main-header">
+      <h1>Your Progress</h1>
+      <div class="badge" id="progressBadge">0% Complete</div>
+    </div>
+    <div class="map-container">
+      <div class="progress-map" id="progressMap"></div>
+    </div>
+  </div>
+
+  <!-- Activity Panel -->
+  <div class="activity-panel">
+    <div class="activity-header">
+      <h3>Recent Updates</h3>
+    </div>
+    <div class="activity-feed" id="activityFeed">
+      <div class="typing" id="typingIndicator">
+        <span></span><span></span><span></span>
+        <span style="font-size:12px;color:var(--text3);margin-left:4px">Your team is getting ready...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summon Bar -->
+  <div class="summon-bar">
+    <input type="text" class="summon-input" id="summonInput" placeholder="Ask your SQUAD anything..." onkeydown="if(event.key==='Enter')sendSummon()">
+    <button class="summon-send" onclick="sendSummon()">→</button>
+    <div class="quick-prompts">
+      <button class="quick-prompt" onclick="quickAsk('I need a logo')">I need a logo</button>
+      <button class="quick-prompt" onclick="quickAsk('How do I find customers?')">Find customers</button>
+      <button class="quick-prompt" onclick="quickAsk('Write my pitch')">Write my pitch</button>
+      <button class="quick-prompt" onclick="quickAsk('Is my app secure?')">Check security</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AGENT DETAIL MODAL ===== -->
+<div class="modal-overlay" id="agentModal" onclick="closeModal(event)">
+  <div class="modal" style="position:relative">
+    <div class="modal-header">
+      <div class="avatar" id="modalAvatar">🎯</div>
+      <div class="info">
+        <h3 id="modalName">Name</h3>
+        <p id="modalRole">Role</p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <h4>Currently Working On</h4>
+      <div id="modalTasks"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn primary" onclick="talkToAgent()">Talk to Them</button>
+      <button class="modal-btn secondary" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let currentStep = 0, selectedGoal = null, userIdea = '';
+let squad = [], activities = [], mapNodes = [];
+let currentAgent = null;
+
+const AGENTS = [
+  {id:'planner',name:'Alex',role:'The Planner',emoji:'🎯',desc:'Maps out your strategy and keeps everything on track',color:'#3b82f6',tasks:['Reviewing your idea','Defining your first milestones','Setting up your project timeline']},
+  {id:'designer',name:'Maya',role:'The Designer',emoji:'🎨',desc:'Creates how your product looks and feels',color:'#ec4899',tasks:['Sketching your brand colors','Designing your app screens','Picking the right fonts']},
+  {id:'builder',name:'Raj',role:'The Builder',emoji:'🔧',desc:'Builds the technology behind your product',color:'#10b981',tasks:['Setting up your app foundation','Building your login system','Connecting your database']},
+  {id:'tester',name:'Sam',role:'The Tester',emoji:'🔍',desc:'Makes sure everything works perfectly',color:'#f59e0b',tasks:['Testing your signup flow','Checking for bugs','Running quality checks']},
+  {id:'marketer',name:'Zoe',role:'The Marketer',emoji:'📢',desc:'Gets your product in front of the right people',color:'#8b5cf6',tasks:['Researching your audience','Planning your launch strategy','Setting up social media']},
+  {id:'writer',name:'Noah',role:'The Writer',emoji:'✍️',desc:'Finds the right words for your product',color:'#06b6d4',tasks:['Writing your website copy','Crafting your welcome email','Creating your pitch']},
+  {id:'money',name:'Priya',role:'The Money Person',emoji:'💰',desc:'Handles pricing, revenue, and financial planning',color:'#eab308',tasks:['Analyzing competitor pricing','Building your revenue model','Planning your funding approach']},
+  {id:'organizer',name:'Omar',role:'The Organizer',emoji:'📋',desc:'Keeps your team coordinated and efficient',color:'#f97316',tasks:['Setting up your task board','Scheduling team check-ins','Tracking deliverables']}
+];
+
+const MAP_DATA = [
+  {id:'idea',title:'Idea Locked In',desc:'Your vision is clear and documented',done:true,agent:'planner',items:['Problem identified','Target audience defined','Value proposition written']},
+  {id:'brand',title:'Brand & Design',desc:'Your look, feel, and first designs',done:false,agent:'designer',items:['Logo concepts created','Color palette chosen','First screen designs']},
+  {id:'mvp',title:'First Working Version',desc:'Your product lives and breathes',done:false,agent:'builder',items:['Core features built','User accounts working','Database connected']},
+  {id:'test',title:'Tested & Refined',desc:'Bug-free and ready for real users',done:false,agent:'tester',items:['All flows tested','Bugs fixed','Performance checked']},
+  {id:'launch',title:'Ready to Launch',desc:'Your go-to-market plan is set',done:false,agent:'marketer',items:['Launch date set','Marketing materials ready','First users lined up']}
+];
+
+const RESPONSES = {
+  logo: {agent:'designer',text:'I\'m on it! I\'ll create 3 logo concepts for you. Give me about 10 minutes and I\'ll show you some options. What feeling do you want your brand to have — playful, professional, or bold?'},
+  design: {agent:'designer',text:'Great question about design! I\'m currently working on your color palette and first screen layouts. Would you like to see some early concepts?'},
+  look: {agent:'designer',text:'I\'ve been thinking about your visual style. I\'m leaning toward a clean, modern look — but I want your input. Do you have any apps or brands you love the look of?'},
+  build: {agent:'builder',text:'I\'ve started building the foundation of your app. Right now I\'m setting up user accounts and the main database. Everything is going smoothly so far!'},
+  code: {agent:'builder',text:'No need to worry about the technical stuff — that\'s my job! I\'m building your app with modern, reliable technology. I\'ll handle all the complex parts.'},
+  tech: {agent:'builder',text:'I\'m using solid, proven technology for your app. It\'ll be fast, secure, and able to grow with you. I\'ll keep you posted on progress!'},
+  users: {agent:'marketer',text:'Finding your first customers is my specialty! I\'m researching where your target audience hangs out online. I\'ll have a launch strategy ready for you soon.'},
+  customer: {agent:'marketer',text:'I\'m working on a customer acquisition plan. The key is finding the right channels — social media, partnerships, or organic growth. What\'s your budget for marketing?'},
+  growth: {agent:'marketer',text:'Growth is all about the right strategy at the right time. I\'m putting together a phased plan — starting with a small group of early users, then scaling up.'},
+  money: {agent:'money',text:'I\'ve been analyzing how similar products price themselves. I\'ll recommend a model that gets you revenue while keeping customers happy. Want to see some numbers?'},
+  price: {agent:'money',text:'Pricing is critical! I\'m looking at what your competitors charge and what your audience is willing to pay. I\'ll have a recommendation for you shortly.'},
+  revenue: {agent:'money',text:'Your revenue model is taking shape. I\'m evaluating subscription vs. one-time payment — each has pros and cons for your type of product.'},
+  plan: {agent:'planner',text:'I\'ve mapped out your first 90 days. The key milestones are: finalize design, build the core app, test with 10 users, then launch publicly. Sound good?'},
+  strategy: {agent:'planner',text:'I\'m thinking about your long-term strategy. Right now we focus on proving your idea works. Once we have 100 happy users, we scale. One step at a time!'},
+  timeline: {agent:'planner',text:'Here\'s what I\'m thinking for timing: Brand & design (Week 1-2), Build core app (Week 3-5), Test & refine (Week 6), Launch (Week 7). Does that feel right?'},
+  words: {agent:'writer',text:'I\'m drafting the words your users will see — from your homepage headline to the button labels. The goal is making everything crystal clear and compelling.'},
+  content: {agent:'writer',text:'Content is king! I\'m writing your website copy, welcome emails, and social media posts. Want to review the homepage headline?'},
+  pitch: {agent:'writer',text:'I\'d love to write your pitch! I need to know: Who is your audience (investors, customers, or partners), and what\'s the one thing that makes your idea special?'},
+  test: {agent:'tester',text:'I\'m running tests on every part of your app. So far everything looks solid! I\'ll flag anything that needs fixing before users see it.'},
+  bug: {agent:'tester',text:'No bugs on my watch! I\'m checking every button, every form, every screen. If something breaks, I\'ll catch it and the Builder will fix it.'},
+  secure: {agent:'builder',text:'Security is my top priority. I\'m implementing bank-level encryption for user data and secure login. Your users\' information will be safe.'},
+  safe: {agent:'builder',text:'Yes, your app will be secure. I\'m building in protection from day one — encrypted data, secure logins, and regular security checks.'},
+  process: {agent:'organizer',text:'I\'m keeping everyone organized! Your task board is set up, deadlines are clear, and I\'m making sure nothing falls through the cracks.'},
+  organize: {agent:'organizer',text:'I\'ve set up your project dashboard. You\'ll be able to see what everyone is working on and when things will be ready.'}
+};
+
+const QUICK_RESPONSES = {
+  'I need a logo': {agent:'designer',text:'Perfect! I\'ll start working on logo concepts right now. I\'ll create 3 different directions and show them to you in a few minutes.',toast:'Designer is sketching your logo concepts 🎨'},
+  'How do I find customers?': {agent:'marketer',text:'I\'m putting together a customer acquisition plan for you. I\'ll identify the best channels for your specific audience and budget.',toast:'Marketer is building your growth strategy 📢'},
+  'Write my pitch': {agent:'writer',text:'I\'d love to! To write the best pitch, tell me: Are you pitching to investors, customers, or partners? And what\'s the one thing that makes your idea impossible to ignore?',toast:'Writer is drafting your pitch ✍️'},
+  'Is my app secure?': {agent:'builder',text:'Absolutely. I\'m building security into every layer — encrypted passwords, protected data, and secure connections. I\'ll run a full security check before launch.',toast:'Builder is running a security check 🔧'}
+};
+
+// ===== INIT =====
+function startWizard(){
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('wizard').classList.add('active');
+  updateWizardUI();
+}
+
+function updateWizardUI(){
+  for(let i=0;i<3;i++){
+    const dot = document.getElementById('dot'+i);
+    dot.className = 'wizard-dot' + (i===currentStep?' active':i<currentStep?' done':'');
+    document.getElementById('step'+i).classList.toggle('active', i===currentStep);
+  }
+  document.getElementById('wizardBack').style.visibility = currentStep===0?'hidden':'visible';
+  const btn = document.getElementById('btn'+currentStep);
+  if(btn) btn.className = 'wizard-btn' + (canProceed()?' enabled':'');
+}
+
+function canProceed(){
+  if(currentStep===0) return !!selectedGoal;
+  if(currentStep===1) return userIdea.length>5;
+  return true;
+}
+
+function selectGoal(goal,el){
+  selectedGoal = goal;
+  document.querySelectorAll('.wizard-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  updateWizardUI();
+}
+
+function checkIdea(){
+  userIdea = document.getElementById('ideaInput').value;
+  updateWizardUI();
+}
+
+function nextStep(){
+  if(!canProceed()) return;
+  if(currentStep<2){
+    currentStep++;
+    updateWizardUI();
+    if(currentStep===2) renderSquadPreview();
+  }
+}
+
+function prevStep(){
+  if(currentStep>0){
+    currentStep--;
+    updateWizardUI();
+  }
+}
+
+function renderSquadPreview(){
+  const container = document.getElementById('squadPreview');
+  container.innerHTML = AGENTS.map(a=>`
+    <div class="wizard-card" style="padding:16px">
+      <div style="font-size:28px;margin-bottom:8px">${a.emoji}</div>
+      <h3 style="font-size:15px">${a.name}</h3>
+      <p style="font-size:13px">${a.role}</p>
+    </div>
+  `).join('');
+}
+
+function launchSquad(){
+  document.getElementById('wizard').classList.remove('active');
+  document.getElementById('assembly').classList.add('active');
+
+  const texts = ['Finding the right specialists for your idea','Briefing your team on the project','Setting up your workspace','Almost ready...'];
+  let i=0;
+  const interval = setInterval(()=>{
+    i++;
+    if(i<texts.length) document.getElementById('assemblyText').textContent = texts[i];
+    else{
+      clearInterval(interval);
+      setTimeout(()=>{
+        document.getElementById('assembly').classList.remove('active');
+        document.getElementById('dashboard').classList.add('active');
+        initDashboard();
+      },600);
+    }
+  },900);
+}
+
+// ===== DASHBOARD =====
+function initDashboard(){
+  squad = AGENTS.map(a=>({...a,status:Math.random()>0.3?'online':'busy'}));
+  renderSquad();
+  renderMap();
+  showToast('Your SQUAD is ready to work! 🎯','info');
+
+  // Initial activities
+  setTimeout(()=>addActivity('planner','I\'ve reviewed your idea and set up the project plan. Let\'s build something great!','agent-reply'),800);
+  setTimeout(()=>addActivity('designer','I\'m starting on your brand look. I\'ll have concepts ready soon.','agent-reply'),2000);
+  setTimeout(()=>addActivity('builder','Foundation is going in place. Everything looks solid so far.','agent-reply'),3500);
+}
+
+function renderSquad(){
+  document.getElementById('squadList').innerHTML = squad.map(a=>`
+    <div class="squad-agent" onclick="openAgentModal('${a.id}')">
+      <div class="avatar" style="background:${a.color}22">${a.emoji}</div>
+      <div class="info">
+        <div class="name">${a.name}</div>
+        <div class="role">${a.role}</div>
+      </div>
+      <div class="status ${a.status}"></div>
+    </div>
+  `).join('');
+}
+
+function renderMap(){
+  const map = document.getElementById('progressMap');
+  let doneCount = MAP_DATA.filter(n=>n.done).length;
+  document.getElementById('progressBadge').textContent = Math.round((doneCount/MAP_DATA.length)*100)+'% Complete';
+
+  map.innerHTML = MAP_DATA.map((node,i)=>`
+    <div class="map-node ${node.done?'done':i===doneCount?'active':''}" id="node-${node.id}" onclick="toggleNode('${node.id}')">
+      <div class="node-num">${node.done?'✓':i+1}</div>
+      <div class="node-content">
+        <div class="node-title">${node.title}</div>
+        <div class="node-desc">${node.desc}</div>
+        <div class="node-meta">
+          <span>${AGENTS.find(a=>a.id===node.agent)?.emoji} ${AGENTS.find(a=>a.id===node.agent)?.name}</span>
+          <span>${node.done?'Done':i===doneCount?'In Progress':'Up Next'}</span>
+        </div>
+        <div class="checklist">
+          ${node.items.map(item=>`
+            <div class="checklist-item ${node.done?'done':''}">
+              <div class="chk">${node.done?'✓':''}</div>
+              <span>${item}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleNode(id){
+  const el = document.getElementById('node-'+id);
+  el.classList.toggle('expanded');
+}
+
+// ===== ACTIVITY =====
+function addActivity(agentId,text,type='agent-reply'){
+  const feed = document.getElementById('activityFeed');
+  const agent = AGENTS.find(a=>a.id===agentId);
+  const div = document.createElement('div');
+  div.className = `activity-item ${type}`;
+  div.innerHTML = `
+    <div class="act-avatar" style="background:${agent.color}22">${agent.emoji}</div>
+    <div class="act-text">
+      <strong>${agent.name}</strong> ${text}
+      <div class="act-time">Just now</div>
+    </div>
+  `;
+  feed.appendChild(div);
+  feed.scrollTop = feed.scrollHeight;
+
+  // Keep only last 20
+  while(feed.children.length > 20) feed.removeChild(feed.firstChild);
+}
+
+function addUserMessage(text){
+  const feed = document.getElementById('activityFeed');
+  const div = document.createElement('div');
+  div.className = 'activity-item user-msg';
+  div.innerHTML = `
+    <div class="act-avatar" style="background:var(--accent-glow)">👤</div>
+    <div class="act-text">
+      <strong>You</strong> ${text}
+      <div class="act-time">Just now</div>
+    </div>
+  `;
+  feed.appendChild(div);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+// ===== SUMMON / CHAT =====
+function sendSummon(){
+  const input = document.getElementById('summonInput');
+  const text = input.value.trim();
+  if(!text) return;
+
+  addUserMessage(text);
+  input.value = '';
+
+  // Show typing
+  const typing = document.getElementById('typingIndicator');
+  typing.classList.add('active');
+
+  // Find response
+  const lower = text.toLowerCase();
+  let match = null;
+  for(const key in RESPONSES){
+    if(lower.includes(key)){ match = RESPONSES[key]; break; }
+  }
+
+  const delay = 800 + Math.random()*1200;
+  setTimeout(()=>{
+    typing.classList.remove('active');
+    if(match){
+      addActivity(match.agent, match.text);
+    } else {
+      addActivity('planner','That\'s a great question! I\'m connecting you with the right team member. In the meantime, try asking about your logo, finding customers, or your launch timeline.');
+    }
+  }, delay);
+}
+
+function quickAsk(text){
+  document.getElementById('summonInput').value = text;
+  addUserMessage(text);
+
+  const typing = document.getElementById('typingIndicator');
+  typing.classList.add('active');
+
+  const qr = QUICK_RESPONSES[text];
+  const delay = 600 + Math.random()*800;
+
+  setTimeout(()=>{
+    typing.classList.remove('active');
+    addActivity(qr.agent, qr.text);
+    if(qr.toast) showToast(qr.toast,'success');
+  }, delay);
+}
+
+// ===== AGENT MODAL =====
+function openAgentModal(id){
+  currentAgent = id;
+  const a = AGENTS.find(x=>x.id===id);
+  document.getElementById('modalAvatar').textContent = a.emoji;
+  document.getElementById('modalAvatar').style.background = a.color+'22';
+  document.getElementById('modalName').textContent = a.name;
+  document.getElementById('modalRole').textContent = a.role + ' — ' + a.desc;
+  document.getElementById('modalTasks').innerHTML = a.tasks.map(t=>`
+    <div class="modal-task">
+      <div class="status-dot" style="background:var(--accent)"></div>
+      <span>${t}</span>
+    </div>
+  `).join('');
+  document.getElementById('agentModal').classList.add('active');
+}
+
+function closeModal(e){
+  if(!e || e.target.id==='agentModal'){
+    document.getElementById('agentModal').classList.remove('active');
+  }
+}
+
+function talkToAgent(){
+  closeModal();
+  if(currentAgent){
+    const a = AGENTS.find(x=>x.id===currentAgent);
+    document.getElementById('summonInput').focus();
+    showToast(`Ask ${a.name} anything in the chat below`,'info');
+  }
+}
+
+// ===== TOASTS =====
+function showToast(text,type='info'){
+  const container = document.getElementById('toasts');
+  const div = document.createElement('div');
+  const icon = type==='success'?'✓':type==='warning'?'⚠':'ℹ';
+  div.className = `toast ${type}`;
+  div.innerHTML = `<span class="icon">${icon}</span><span>${text}</span>`;
+  container.appendChild(div);
+  setTimeout(()=>{
+    div.classList.add('out');
+    setTimeout(()=>div.remove(),400);
+  },4000);
+}
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeModal();
+});
+</script>
+</body>
+</html>
